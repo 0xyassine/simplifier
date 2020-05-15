@@ -3,6 +3,7 @@
 #reverse shells based on pentestmonkey and nishang shells
 import re
 import subprocess
+import colorama
 from subprocess import call
 import os
 from colorama import Fore,Style
