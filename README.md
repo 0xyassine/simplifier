@@ -3,6 +3,7 @@
 ## how to install
 
 --> python3 and metasploit framework are required<br/>
+--> Please install metasploit and configure it before running the script ... <br/>
 
 apt install python3-pip<br/>
 pip3 install colorama<br/>
