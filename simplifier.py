@@ -5,7 +5,6 @@ import re
 import subprocess
 from subprocess import call
 import os
-import colorama
 from colorama import Fore,Style
 import signal
 import sys
