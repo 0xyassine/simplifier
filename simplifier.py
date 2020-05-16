@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 #developed by YaSsInE
 #reverse shells based on pentestmonkey and nishang shells
+# ln -s $(pwd)/simplifier.py /usr/local/bin/
 import re
 import subprocess
 import colorama
