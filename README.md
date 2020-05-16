@@ -13,3 +13,4 @@ pip3 install pyfiglet<br/>
 2- cd simplifier && chmod +x simplifier.py <br/>
 3- ./simplifier.py
 
+> Note: to run it from any location: ln -s $(pwd)/simplifier.py /usr/local/bin/
