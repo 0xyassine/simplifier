@@ -14,3 +14,5 @@ pip3 install pyfiglet<br/>
 3- ./simplifier.py
 
 > Note: to run it from any location: ln -s $(pwd)/simplifier.py /usr/local/bin/
+
+![info](https://0xyassine.github.io/simplifier/img/info.jpg)
