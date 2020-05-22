@@ -9,8 +9,8 @@ I just automated the `tvasion` script to make the work easier.<br/><br/>
 --> python3 and metasploit framework are required.<br/>
 --> Please install metasploit and configure it before running the script ... <br/>
 
-apt install powershell
-apt install -y mono-mcs
+apt install powershell<br/>
+apt install -y mono-mcs<br/>
 apt install python3-pip<br/>
 pip3 install colorama<br/>
 pip3 install pyfiglet<br/>
