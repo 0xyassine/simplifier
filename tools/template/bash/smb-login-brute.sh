@@ -25,6 +25,7 @@ for i in $(cat $1);do
 		fi
 		if [[ "$res" == *"$success"* ]]; then
 			printf "${GR}[+] login successful $i:$j\n"
+			echo $j | smbclient -L $3 -U $i
 		fi
 		if [[ "$res" == *"$timed_out"* ]]; then
 			printf "${RED}[-] Connection timed out !\n"
