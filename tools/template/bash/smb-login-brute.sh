@@ -24,7 +24,7 @@ for i in $(cat $1);do
   			printf "${RED}[-] login failed $i:$j\n"
 		fi
 		if [[ "$res" == *"$success"* ]]; then
-			printf "${GR}[+] login succesfull $i:$j\n"
+			printf "${GR}[+] login successful $i:$j\n"
 		fi
 		if [[ "$res" == *"$timed_out"* ]]; then
 			printf "${RED}[-] Connection timed out !\n"
