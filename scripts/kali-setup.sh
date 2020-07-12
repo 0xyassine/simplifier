@@ -10,11 +10,12 @@ fi
 
 #echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" > /etc/apt/sources.list
 #echo "deb-src http://http.kali.org/kali kali-rolling main non-free contrib" >> /etc/apt/sources.list
-#dpkg --add-architecture i386
-apt update
-#apt upgrade -y
+dpkg --add-architecture i386
+apt-get clean
+apt-get update -y
+apt-get upgrade -y
 #enable this for nvidia
-#apt install -y nvidia-driver nvidia-cuda-toolkit
+apt install -y nvidia-driver nvidia-cuda-toolkit
 #vlc
 apt install vlc -y
 sed -i 's/geteuid/getppid/' /usr/bin/vlc

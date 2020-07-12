@@ -9,7 +9,7 @@ function ctrl_c() {
 }
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-printf "${RED}[+] Installing virtualbox , please wait ... \n${GREEN}"
+printf "${RED}[+] Installing mega-sync , please wait ... \n${GREEN}"
 wget https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megasync-Debian_10.0_amd64.deb
 dpkg -i megasync-Debian_10.0_amd64.deb
 apt install -f -y
