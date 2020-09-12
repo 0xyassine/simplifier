@@ -573,7 +573,10 @@ def os_name():
 		exit()
 
 def check_apt():
-	original = subprocess.check_output(["cat","/etc/apt/sources.list" ])
+    try:
+	    original = subprocess.check_output(["cat","/etc/apt/sources.list" ])
+    except:
+        print(Fore.RED+"[-] OS NOT SUPPORTED !")
 	#get apt file content
 	original_sources = original.decode('UTF-8').splitlines()
 	#remove spaces
