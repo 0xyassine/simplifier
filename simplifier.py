@@ -573,32 +573,33 @@ def os_name():
 		exit()
 
 def check_apt():
-	original = subprocess.check_output(["cat","/etc/apt/sources.list" ])
+    os_name()
+    original = subprocess.check_output(["cat","/etc/apt/sources.list" ])
 	#get apt file content
-	original_sources = original.decode('UTF-8').splitlines()
+    original_sources = original.decode('UTF-8').splitlines()
 	#remove spaces
-	original_sources_without = []
-	for i in original_sources:
-		original_sources_without.append(i.replace(' ',''))
-	if str(os_name()) == "kali":
-		print(Fore.GREEN+"--> ["+Fore.RED+str(os_name())+Fore.GREEN+"] os detected !")
-		recommended = list(sources("kali"))
-		for i in range(len(recommended)):
-			if recommended[i].replace(' ','') not in original_sources_without:
-				command = "echo '"+str(recommended[i])+"' >> /etc/apt/sources.list"
-				os.system(command)
-		print(Fore.RED+"[+]"+Fore.GREEN+" Adding default ["+Fore.RED+str(os_name())+Fore.GREEN+"] sources list done !")	
-	elif str(os_name()) == "parrot":
-		print(Fore.GREEN+"--> ["+Fore.RED+str(os_name())+Fore.GREEN+"] os detected !")
-		recommended = list(sources("parrot"))
-		for i in range(len(recommended)):
-			if recommended[i].replace(' ','') not in original_sources_without:
-				command = "echo '"+str(recommended[i])+"' >> /etc/apt/sources.list"
-				os.system(command)
-		print(Fore.RED+"[+]"+Fore.GREEN+" Adding default ["+Fore.RED+str(os_name())+Fore.GREEN+"] sources list done !")
-	else:
-		print(Fore.RED+"[-] OS NOT SUPPORTED !")
-		exit()
+    original_sources_without = []
+    for i in original_sources:
+	    original_sources_without.append(i.replace(' ',''))
+    if str(os_name()) == "kali":
+	    print(Fore.GREEN+"--> ["+Fore.RED+str(os_name())+Fore.GREEN+"] os detected !")
+	    recommended = list(sources("kali"))
+	    for i in range(len(recommended)):
+		    if recommended[i].replace(' ','') not in original_sources_without:
+			    command = "echo '"+str(recommended[i])+"' >> /etc/apt/sources.list"
+			    os.system(command)
+	    print(Fore.RED+"[+]"+Fore.GREEN+" Adding default ["+Fore.RED+str(os_name())+Fore.GREEN+"] sources list done !")	
+    elif str(os_name()) == "parrot":
+	    print(Fore.GREEN+"--> ["+Fore.RED+str(os_name())+Fore.GREEN+"] os detected !")
+	    recommended = list(sources("parrot"))
+	    for i in range(len(recommended)):
+		    if recommended[i].replace(' ','') not in original_sources_without:
+			    command = "echo '"+str(recommended[i])+"' >> /etc/apt/sources.list"
+			    os.system(command)
+	    print(Fore.RED+"[+]"+Fore.GREEN+" Adding default ["+Fore.RED+str(os_name())+Fore.GREEN+"] sources list done !")
+    else:
+	    print(Fore.RED+"[-] OS NOT SUPPORTED !")
+	    exit()
 
 script_pt = script_path()
 current_path = get_path()
