@@ -573,11 +573,10 @@ def os_name():
 		exit()
 
 def check_apt():
-    try:
-	    original = subprocess.check_output(["cat","/etc/apt/sources.list" ])
-    except:
+    if str(os_name()) !="kali" or str(os_name()) != "parrot":
         print(Fore.RED+"[-] OS NOT SUPPORTED !")
         exit()
+	original = subprocess.check_output(["cat","/etc/apt/sources.list" ])
 	#get apt file content
 	original_sources = original.decode('UTF-8').splitlines()
 	#remove spaces
