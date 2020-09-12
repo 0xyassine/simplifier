@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+#developed by YaSsInE
 from optparse import OptionParser
 import sys
 import signal

