@@ -853,13 +853,14 @@ elif os_item == "install third-party apps":
             name = str(i)+".sh"
             third_tools(name)
 elif os_item == "install Top tools":
-    check_apt()
     print(Fore.RED+"[+]"+Fore.GREEN+" Installing top tools started !")
     if str(os_name()) == "kali":
+        check_apt()
         tool = str(script_pt)+"/scripts/kali-setup.sh"
         subprocess.call(["chmod","777",tool])
         os.system(tool)
     elif str(os_name()) == "parrot":
+        check_apt()
         tool = str(script_pt)+"/scripts/parrot-setup.sh"
         subprocess.call(["chmod","777",tool])
         os.system(tool)
