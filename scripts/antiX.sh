@@ -1,5 +1,11 @@
 #!/bin/bash
 #created by YaSsInE
+#run as root only
+if [ $(id -u) -ne 0 ]; then
+	echo "This script must be ran as root"
+	exit 1
+fi
+
 apt update #update system
 apt upgrade -y #upgrade tools
 apt upgrade --fix-missing -y
