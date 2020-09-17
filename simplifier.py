@@ -865,6 +865,7 @@ elif os_item == "install Top tools":
         subprocess.call(["chmod","777",tool])
         os.system(tool)
     elif str(os_name()) == "antix":
+        print(Fore.GREEN+"--> ["+Fore.RED+str(os_name())+Fore.GREEN+"] os detected !")
         tool = str(script_pt)+"/scripts/antiX.sh"
         subprocess.call(["chmod","777",tool])
         os.system(tool)        
