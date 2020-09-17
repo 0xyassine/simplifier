@@ -6,17 +6,14 @@ A simple python3 script to generate reverse shells based on [nishang](https://gi
 Added option to create undetectable payload (option 4 in the script)<br/>
 This option will use the `tvasion` script created by loadenmb , you can check it [here](https://github.com/loadenmb/tvasion)<br/>
 I just automated the `tvasion` script to make the work easier.<br/><br/>
---> python3 and metasploit framework are required.<br/>
+--> python3 ,powershell and metasploit framework are required.<br/>
 --> Please install metasploit and configure it before running the script ... <br/>
 
-apt install powershell<br/>
-apt install -y mono-mcs<br/>
-apt install python3-pip<br/>
-pip3 install colorama<br/>
-pip3 install pyfiglet<br/>
-pip3 install inquirer<br/>
+
 1- git clone https://github.com/0xyassine/simplifier.git <br/>
-2- cd simplifier && chmod +x simplifier.py <br/>
+2- cd simplifier <br/>
+3- pip3 install -r requirements.txt <br/>
+2- chmod +x simplifier.py <br/>
 3- ./simplifier.py
 
 > Note: to run it from any location: ln -s $(pwd)/simplifier.py /usr/local/bin/

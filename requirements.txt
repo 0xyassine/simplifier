@@ -1,0 +1,10 @@
+mono-mcs
+python3-pip
+colorama
+pyfiglet
+inquirer
+Crypto
+pycrypto
+mechanize
+httplib2
+builtwith

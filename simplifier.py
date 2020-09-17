@@ -562,15 +562,18 @@ def sources(name):
 		return "deb-src http://http.kali.org/kali kali-rolling main non-free contrib","deb http://http.kali.org/kali kali-rolling main non-free contrib"
 
 def os_name():
-	res = subprocess.check_output(["uname","-r"])
-	res = res.decode('UTF-8').strip()
-	if "parrot" in res:
-		return "parrot"
-	elif "kali" in res:
-		return "kali"
-	else:
-		print(Fore.RED+"[-] OS NOT SUPPORTED !")
-		exit()
+    res = subprocess.check_output(["uname","-r"])
+    res = res.decode('UTF-8').strip()   
+    if "parrot" in res:
+        return "parrot"
+    elif "kali" in res:
+        return "kali"
+    elif "antix" in res:
+        return "antix"
+    else:
+	    print(Fore.RED+"[-] OS NOT SUPPORTED !")        
+	    exit()
+
 
 def check_apt():
     os_name()
@@ -597,6 +600,8 @@ def check_apt():
 			    command = "echo '"+str(recommended[i])+"' >> /etc/apt/sources.list"
 			    os.system(command)
 	    print(Fore.RED+"[+]"+Fore.GREEN+" Adding default ["+Fore.RED+str(os_name())+Fore.GREEN+"] sources list done !")
+    elif str(os_name()) == "antix":
+        print(Fore.GREEN+"--> ["+Fore.RED+str(os_name())+Fore.GREEN+"] os detected !")
     else:
 	    print(Fore.RED+"[-] OS NOT SUPPORTED !")
 	    exit()
@@ -858,6 +863,10 @@ elif os_item == "install Top tools":
         tool = str(script_pt)+"/scripts/parrot-setup.sh"
         subprocess.call(["chmod","777",tool])
         os.system(tool)
+    elif str(os_name()) == "antix":
+        tool = str(script_pt)+"/scripts/antiX.sh"
+        subprocess.call(["chmod","777",tool])
+        os.system(tool)        
     else:
         print(Fore.RED+"[-] OS NOT SUPPORTED !")
         exit()
