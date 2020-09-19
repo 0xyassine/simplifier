@@ -1,5 +1,3 @@
-mono-mcs
-python3-pip
 colorama
 pyfiglet
 inquirer

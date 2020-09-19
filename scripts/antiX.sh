@@ -11,9 +11,10 @@ apt upgrade -y #upgrade tools
 apt upgrade --fix-missing -y
 #installing tools
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-apt-get install lightdm -y
-apt -y install task-gnome-desktop
-dpkg-reconfigure lightdm
+#apt-get install lightdm -y
+#apt -y install task-gnome-desktop
+#dpkg-reconfigure lightdm
+#apt install gnome-tweak-tool -y
 apt install btscanner -y 
 apt install php -y
 apt install git -y
@@ -42,6 +43,7 @@ pip3 install gmpy
 pip3 install ecdsa
 apt install python3-gmpy2 -y
 apt install g++ -y
+apt install ruby-dev -y
 gem install winrm winrm-fs stringio
 gem install evil-winrm
 gem install wpscan
@@ -71,34 +73,35 @@ docker pull b4den/rsacrack
 #veil
 
 #anonsurf
-git clone https://github.com/Und3rf10w/kali-anonsurf.git /opt/anon
-rm -f /etc/apt/sources.list.d/i2p.list
+#git clone https://github.com/Und3rf10w/kali-anonsurf.git /opt/anon
+#rm -f /etc/apt/sources.list.d/i2p.list
 # Compile the i2p ppa
-echo "deb http://deb.i2p2.no/ unstable main" > /etc/apt/sources.list.d/i2p.list # Default config reads repos from sources.list.d
-wget https://geti2p.net/_static/i2p-debian-repo.key.asc -O /tmp/i2p-debian-repo.key.asc # Get the latest i2p repo pubkey
-apt-key add /tmp/i2p-debian-repo.key.asc # Import the key
-rm /tmp/i2p-debian-repo.key.asc # delete the temp key
-apt-get update # Update repos
-apt install libservlet3.0-java -y
-curl -L 'http://ftp.us.debian.org/debian/pool/main/j/jetty8/libjetty8-java_8.1.16-4_all.deb' -o /tmp/java.deb
-dpkg -i /tmp/java.deb
-rm /tmp/java.deb
-apt -y install libecj-java libgetopt-java libservlet3.0-java  ttf-dejavu i2p i2p-router libjbigi-jni
-curl -L 'http://ftp.us.debian.org/debian/pool/main/g/glassfish/glassfish-javaee_2.1.1-b31g+dfsg1-2_all.deb' -o /tmp/glass.deb
-dpkg -i /tmp/glass.deb
-apt-get -f install
-rm /tmp/glass.deb
-apt install -y i2p-keyring
-apt install -y secure-delete tor i2p
-dpkg-deb -b /opt/anon/kali-anonsurf-deb-src/ /tmp/kali-anonsurf.deb
-dpkg -i /tmp/kali-anonsurf.deb || (apt-get -f install && dpkg -i /tmp/kali-anonsurf.deb)
-rm /tmp/kali-anonsurf.deb
+#echo "deb http://deb.i2p2.no/ unstable main" > /etc/apt/sources.list.d/i2p.list # Default config reads repos from sources.list.d
+#wget https://geti2p.net/_static/i2p-debian-repo.key.asc -O /tmp/i2p-debian-repo.key.asc # Get the latest i2p repo pubkey
+#apt-key add /tmp/i2p-debian-repo.key.asc # Import the key
+#rm /tmp/i2p-debian-repo.key.asc # delete the temp key
+#apt-get update # Update repos
+#apt install libservlet3.0-java -y
+#curl -L 'http://ftp.us.debian.org/debian/pool/main/j/jetty8/libjetty8-java_8.1.16-4_all.deb' -o /tmp/java.deb
+#dpkg -i /tmp/java.deb
+#rm /tmp/java.deb
+#apt -y install libecj-java libgetopt-java libservlet3.0-java  ttf-dejavu i2p i2p-router libjbigi-jni
+#curl -L 'http://ftp.us.debian.org/debian/pool/main/g/glassfish/glassfish-javaee_2.1.1-b31g+dfsg1-2_all.deb' -o /tmp/glass.deb
+#dpkg -i /tmp/glass.deb
+#apt-get -f install
+#rm /tmp/glass.deb
+#apt install -y i2p-keyring
+#apt install -y secure-delete tor i2p
+#dpkg-deb -b /opt/anon/kali-anonsurf-deb-src/ /tmp/kali-anonsurf.deb
+#dpkg -i /tmp/kali-anonsurf.deb || (apt-get -f install && dpkg -i /tmp/kali-anonsurf.deb)
+#rm /tmp/kali-anonsurf.deb
 
 
 #john
 git clone https://github.com/openwall/john.git /opt/john
-/opt/john/src/configure
-cd /opt/john/src 
+apt install libssl-dev -y
+cd /opt/john/src
+bash /opt/john/src/configure 
 make -s clean && make -sj4
 echo '#!/bin/bash' > /usr/bin/john
 echo '/opt/john/run/john "$@"' >> /usr/bin/john
@@ -131,9 +134,16 @@ git clone https://github.com/danielmiessler/SecLists.git /usr/share/wordlists/se
 curl -L 'https://www.scrapmaker.com/data/wordlists/dictionaries/rockyou.txt' > /usr/share/wordlists/rockyou.txt
 
 #jd-gui
-echo '#!/bin/bash' > /usr/bin/jd-gui
-echo 'java -jar /opt/jd-gui/jd-gui.jar' >> /usr/bin/jd-gui
-chmod +x /usr/bin/jd-gui
+#mkdir /opt/jd-gui
+#curl -L 'https://github-production-release-asset-2e65be.s3.amazonaws.com/32844456/012e1e80-272e-11ea-9941-5a32c9f59220?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200918%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200918T202757Z&X-Amz-Expires=300&X-Amz-Signature=43606082c95f7248b90dc65b0ffbc866a8476d4ff1440046bc2ede9052f7f387&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=32844456&response-content-disposition=attachment%3B%20filename%3Djd-gui-1.6.6.jar&response-content-type=application%2Foctet-stream' -o /opt/jd-gui/jd-gui.jar
+#echo '#!/bin/bash' > /usr/bin/jd-gui
+#echo 'java -jar /opt/jd-gui/jd-gui.jar' >> /usr/bin/jd-gui
+#chmod +x /usr/bin/jd-gui
+#git clone https://github.com/java-decompiler/jd-gui.git /opt/jd-gui
+#cd /opt/jd-gui
+#./gradlew build
+#echo '#!/bin/bash' > /usr/bin/jd-gui
+#echo 'java -jar /opt/jd-gui/jd-gui.jar' >> /usr/bin/jd-gui
 
 #bloodhound
 wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -
@@ -151,18 +161,18 @@ apt update
 #apt install -y openjdk-8-jdk openjdk-8-jre
 apt --fix-broken install -y
 apt install neo4j -y
-echo "dbms.active_database=graph.db" >> /etc/neo4j/neo4j.conf
-echo "dbms.connector.http.address=0.0.0.0:7474" >> /etc/neo4j/neo4j.conf
-echo "dbms.connector.bolt.address=0.0.0.0:7687" >> /etc/neo4j/neo4j.conf
-echo "dbms.allow_format_migration=true" >> /etc/neo4j/neo4j.conf
-git clone https://github.com/adaptivethreat/BloodHound.git /opt/bloodhound
-mkdir /var/lib/neo4j/data/databases/graph.db
-cp -R /opt/bloodhound/BloodHoundExampleDB.db/* /var/lib/neo4j/data/databases/graph.db
-curl -L 'https://github-production-release-asset-2e65be.s3.amazonaws.com/56452110/8c0bc480-cbfc-11ea-820c-dd646d9059ea?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200911%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200911T160854Z&X-Amz-Expires=300&X-Amz-Signature=02068860704f13c636c5c001b0660351ab729fda91e2cfb1a490e5807842543d&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=56452110&response-content-disposition=attachment%3B%20filename%3DBloodHound-linux-x64.zip&response-content-type=application%2Foctet-stream' -o /opt/blood.zip
-unzip /opt/blood.zip -d /opt
-echo '#!/bin/bash' > /usr/bin/bloodhound
-echo '/opt/BloodHound-linux-x64/BloodHound --no-sandbox' >> /usr/bin/bloodhound
-chmod +x /usr/bin/bloodhound
+#echo "dbms.active_database=graph.db" >> /etc/neo4j/neo4j.conf
+#echo "dbms.connector.http.address=0.0.0.0:7474" >> /etc/neo4j/neo4j.conf
+#echo "dbms.connector.bolt.address=0.0.0.0:7687" >> /etc/neo4j/neo4j.conf
+#echo "dbms.allow_format_migration=true" >> /etc/neo4j/neo4j.conf
+#git clone https://github.com/adaptivethreat/BloodHound.git /opt/bloodhound
+#mkdir /var/lib/neo4j/data/databases/graph.db
+#cp -R /opt/bloodhound/BloodHoundExampleDB.db/* /var/lib/neo4j/data/databases/graph.db
+#curl -L 'https://github-production-release-asset-2e65be.s3.amazonaws.com/56452110/8c0bc480-cbfc-11ea-820c-dd646d9059ea?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200911%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200911T160854Z&X-Amz-Expires=300&X-Amz-Signature=02068860704f13c636c5c001b0660351ab729fda91e2cfb1a490e5807842543d&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=56452110&response-content-disposition=attachment%3B%20filename%3DBloodHound-linux-x64.zip&response-content-type=application%2Foctet-stream' -o /opt/blood.zip
+#unzip /opt/blood.zip -d /opt
+#echo '#!/bin/bash' > /usr/bin/bloodhound
+#echo '/opt/BloodHound-linux-x64/BloodHound --no-sandbox' >> /usr/bin/bloodhound
+#chmod +x /usr/bin/bloodhound
 
 #padbuster
 git clone https://github.com/AonCyberLabs/PadBuster.git /opt/padbuster 
@@ -185,9 +195,6 @@ curl 'https://portswigger.net/burp/releases/download?product=community&version=2
 chmod +x /tmp/burpsuite.sh
 bash /tmp/burpsuite.sh
 rm /tmp/burpsuite.sh
-echo '#!/bin/bash' > /usr/bin/burpsuite
-echo '/opt/BurpSuiteCommunity/BurpSuiteCommunity' >> /usr/bin/burpsuite
-chmod +x /usr/bin/burpsuite
 
 #powershell
 apt install apt-transport-https -y
@@ -236,6 +243,10 @@ chmod +x /usr/bin/autorecon
 git clone https://github.com/SecureAuthCorp/impacket.git /opt/impacket
 pip3 install ldap3==2.8.1
 pip3 install pyasn1==0.4.6
+pip install setuptools
+pip install impacket
+pip3 install impacket
+pip install /opt/impacket/.
 pip install /opt/impacket/.
 
 #git dumper
@@ -253,10 +264,17 @@ mkdir /opt/ysoserial
 curl -L 'https://jitpack.io/com/github/frohoff/ysoserial/master-6eca5bc740-1/ysoserial-master-6eca5bc740-1.jar' -o /opt/ysoserial/ysoserial.jar
 
 #crackmapexec
+pip3 install gevent==1.2.0
+pip install gevent==1.2.0
+apt-get install python3-dev -y
+pip install cme
+pip3 install cme
 apt-get install -y libssl-dev libffi-dev python-dev build-essential
 git clone --recursive https://github.com/byt3bl33d3r/CrackMapExec /opt/CrackMapExec
-pip3 install -r /opt/CrackMapExec/requirements.txt
-python3 /opt/CrackMapExec/setup.py install
+cd /opt/CrackMapExec/
+pip3 install -r requirements.txt
+python3 setup.py install
+cd $DIR
 
 #setoolkit
 git clone https://github.com/trustedsec/social-engineer-toolkit/ /opt/setoolkit/
