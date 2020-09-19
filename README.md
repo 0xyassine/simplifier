@@ -12,7 +12,7 @@ I just automated the `tvasion` script to make the work easier.<br/><br/>
 
 1- git clone https://github.com/0xyassine/simplifier.git <br/>
 2- cd simplifier <br/>
-3- apt install mono-mcs -y
+3- apt install mono-mcs -y <br/>
 4- pip3 install -r requirements.txt <br/>
 5- chmod +x simplifier.py <br/>
 6- ./simplifier.py
