@@ -134,16 +134,11 @@ git clone https://github.com/danielmiessler/SecLists.git /usr/share/wordlists/se
 curl -L 'https://www.scrapmaker.com/data/wordlists/dictionaries/rockyou.txt' > /usr/share/wordlists/rockyou.txt
 
 #jd-gui
-#mkdir /opt/jd-gui
-#curl -L 'https://github-production-release-asset-2e65be.s3.amazonaws.com/32844456/012e1e80-272e-11ea-9941-5a32c9f59220?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200918%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200918T202757Z&X-Amz-Expires=300&X-Amz-Signature=43606082c95f7248b90dc65b0ffbc866a8476d4ff1440046bc2ede9052f7f387&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=32844456&response-content-disposition=attachment%3B%20filename%3Djd-gui-1.6.6.jar&response-content-type=application%2Foctet-stream' -o /opt/jd-gui/jd-gui.jar
-#echo '#!/bin/bash' > /usr/bin/jd-gui
-#echo 'java -jar /opt/jd-gui/jd-gui.jar' >> /usr/bin/jd-gui
-#chmod +x /usr/bin/jd-gui
-#git clone https://github.com/java-decompiler/jd-gui.git /opt/jd-gui
-#cd /opt/jd-gui
-#./gradlew build
-#echo '#!/bin/bash' > /usr/bin/jd-gui
-#echo 'java -jar /opt/jd-gui/jd-gui.jar' >> /usr/bin/jd-gui
+mkdir /opt/jd-gui
+curl -L 'https://gitlab.com/kalilinux/packages/jd-gui/-/raw/kali/master/jd-gui-1.6.3-min.jar?inline=false' > /opt/jd-gui/jd-gui.jar
+echo '#!/bin/bash' > /usr/bin/jd-gui
+echo 'java -jar /opt/jd-gui/jd-gui.jar' >> /usr/bin/jd-gui
+chmod +x /usr/bin/jd-gui
 
 #bloodhound
 wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add -

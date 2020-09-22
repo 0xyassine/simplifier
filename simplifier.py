@@ -481,6 +481,11 @@ def third_tools(name):
         subprocess.call(["chmod","777",path])
         os.system(path)
 
+def mx_tools(name):
+        path = str(script_pt)+"/mx-linux/"+str(name)
+        subprocess.call(["chmod","777",path])
+        os.system(path)
+
 def tvasion(ip,port,type,shell):
     tmp_folder = temp_folder()
     temp = "/tmp/"+tmp_folder+"/"
@@ -562,14 +567,14 @@ def sources(name):
 		return "deb-src http://http.kali.org/kali kali-rolling main non-free contrib","deb http://http.kali.org/kali kali-rolling main non-free contrib"
 
 def os_name():
-    res = subprocess.check_output(["uname","-r"])
+    res = subprocess.check_output(["cat","/etc/os-release"])
     res = res.decode('UTF-8').strip()   
     if "parrot" in res:
         return "parrot"
     elif "kali" in res:
         return "kali"
-    elif "antix" in res:
-        return "antix"
+    elif "debian" in res and "10" in res and "buster" in res:
+        return "Debian 10 buster"
     else:
 	    print(Fore.RED+"[-] OS NOT SUPPORTED !")        
 	    exit()
@@ -622,6 +627,8 @@ magic_bytes = ["jpg simple php magic bytes","jpg full php magic bytes","gif simp
 template = ["python","php","smb-login-brute.sh"]
 encrypted = ["nishang","FUD reverse shell","msf"]
 msf = ["windows/x64/exec","windows/x64/meterpreter/reverse_tcp"]
+x_linux = ["Basic Setup","Basic Kali Tools","Other Tools"]
+x_linux_size = len(x_linux)
 msf_size = len(msf)
 encrypted_size = len(encrypted)
 template_size = len(template)
@@ -853,7 +860,6 @@ elif os_item == "install third-party apps":
             name = str(i)+".sh"
             third_tools(name)
 elif os_item == "install Top tools":
-    print(Fore.RED+"[+]"+Fore.GREEN+" Installing top tools started !")
     if str(os_name()) == "kali":
         check_apt()
         tool = str(script_pt)+"/scripts/kali-setup.sh"
@@ -864,11 +870,36 @@ elif os_item == "install Top tools":
         tool = str(script_pt)+"/scripts/parrot-setup.sh"
         subprocess.call(["chmod","777",tool])
         os.system(tool)
-    elif str(os_name()) == "antix":
+    elif str(os_name()) == "Debian 10 buster":
         print(Fore.GREEN+"--> ["+Fore.RED+str(os_name())+Fore.GREEN+"] os detected !")
-        tool = str(script_pt)+"/scripts/antiX.sh"
-        subprocess.call(["chmod","777",tool])
-        os.system(tool)        
+        print(Fore.GREEN+50*"-")
+        print(Fore.RED+"--> IF IT'S THE FIRST TIME , YOU SHOULD RUN BASIC SETUP TO AVOID ERRORS ! <--")
+        print(Fore.GREEN+50*"-")
+        x_item = select_item(x_linux, x_linux_size)
+        #os.system(tool)
+        if "Basic Setup" in x_item:
+            base = str(script_pt)+"/mx-linux/setup.sh"
+            subprocess.call(["chmod","777",base])
+            base1 = str(script_pt)+"/mx-linux/python.sh"
+            subprocess.call(["chmod","777",base1])
+            os.system(base)
+            os.system(base1)
+        elif "Basic Kali Tools" in x_item:
+            tool = str(script_pt)+"/mx-linux/kali.sh"
+            subprocess.call(["chmod","777",tool])
+            os.system(tool)
+        elif "Other Tools":
+            items = []
+            questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['autorecon','bloodhound','burpsuite','crackmapexec','curl-http3','dotdotpwn','gitdumper','gobuster','impacket','jd-gui','john','maltego','metasploit','mysql','nvidia','padbuster','powershell','ridenum','rsacrack','searchsploit','seclist','setoolkit','shodan','winpayloads','ysoserial'],)]
+            answers = inquirer.prompt(questions)
+            if len(answers['scripts']) == 0:
+                print(Fore.RED+"[-] No script selected !")
+                exit()
+            else:
+                items = list(answers.values())
+                for i in items[0]:
+                    name = str(i)+".sh"
+                    mx_tools(name)
     else:
         print(Fore.RED+"[-] OS NOT SUPPORTED !")
         exit()

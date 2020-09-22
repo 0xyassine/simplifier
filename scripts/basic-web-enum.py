@@ -133,7 +133,7 @@ def get_subdomain(response):
         for t in text:
             if t.parent.name not in blacklist:
                 output += '{} '.format(t)
-        x = re.findall(r"([a-z]+)\.([a-z]+)\.([a-z]+)", str(output))
+        x = re.findall(r"([a-z -]+)\.([a-z -]+)\.([a-z -]+)", str(output))
         if len(x) != 0:
             for i in range(len(x)):
                 print(Fore.RED+'    --> '+Fore.GREEN+'.'.join(x[i]))
