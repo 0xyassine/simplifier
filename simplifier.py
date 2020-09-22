@@ -838,27 +838,33 @@ elif os_item == "AV Bypass":
 elif os_item == "install scripts":
     items = []
     questions = [inquirer.Checkbox('scripts',message="use space to select tool(s) and press enter for install ",choices=['smb-login-brute.sh','oneliner.py','basic-web-enum.py'],)]
-    answers = inquirer.prompt(questions)
-    if len(answers['scripts']) == 0:
-        print(Fore.RED+"[-] No script selected !")
-        exit()
-    else:
-        items = list(answers.values())
-        for i in items[0]:
-            install_script(i)
-            print(Fore.GREEN+"[+] "+str(i) +" is installed. You can run "+str(i)+ " directly from your terminal !")
+    try:
+        answers = inquirer.prompt(questions)
+        if len(answers['scripts']) == 0:
+            print(Fore.RED+"[-] No script selected !")
+            exit()
+        else:
+            items = list(answers.values())
+            for i in items[0]:
+                install_script(i)
+                print(Fore.GREEN+"[+] "+str(i) +" is installed. You can run "+str(i)+ " directly from your terminal !")
+    except:
+        print(Fore.GREEN+'\nThank you for using my tool !! See you soon ...')            
 elif os_item == "install third-party apps":
     items = []
     questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['chrome','sublime-text','virtualbox','xdm','mega-sync','teamviewer','vscode'],)]
-    answers = inquirer.prompt(questions)
-    if len(answers['scripts']) == 0:
-        print(Fore.RED+"[-] No script selected !")
-        exit()
-    else:
-        items = list(answers.values())
-        for i in items[0]:
-            name = str(i)+".sh"
-            third_tools(name)
+    try:
+        answers = inquirer.prompt(questions)
+        if len(answers['scripts']) == 0:
+            print(Fore.RED+"[-] No script selected !")
+            exit()
+        else:
+            items = list(answers.values())
+            for i in items[0]:
+                name = str(i)+".sh"
+                third_tools(name)
+    except:
+        print(Fore.GREEN+'\nThank you for using my tool !! See you soon ...')            
 elif os_item == "install Top tools":
     if str(os_name()) == "kali":
         check_apt()
@@ -891,15 +897,18 @@ elif os_item == "install Top tools":
         elif "Other Tools":
             items = []
             questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['autorecon','bloodhound','burpsuite','crackmapexec','curl-http3','dotdotpwn','gitdumper','gobuster','impacket','jd-gui','john','maltego','metasploit','mysql','nvidia','padbuster','powershell','ridenum','rsacrack','searchsploit','seclist','setoolkit','shodan','winpayloads','ysoserial'],)]
-            answers = inquirer.prompt(questions)
-            if len(answers['scripts']) == 0:
-                print(Fore.RED+"[-] No script selected !")
-                exit()
-            else:
-                items = list(answers.values())
-                for i in items[0]:
-                    name = str(i)+".sh"
-                    mx_tools(name)
+            try:
+                answers = inquirer.prompt(questions)
+                if len(answers['scripts']) == 0:
+                    print(Fore.RED+"[-] No script selected !")
+                    exit()
+                else:
+                    items = list(answers.values())
+                    for i in items[0]:
+                        name = str(i)+".sh"
+                        mx_tools(name)
+            except:
+                print(Fore.GREEN+'\nThank you for using my tool !! See you soon ...')
     else:
         print(Fore.RED+"[-] OS NOT SUPPORTED !")
         exit()
