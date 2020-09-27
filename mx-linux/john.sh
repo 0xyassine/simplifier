@@ -20,8 +20,8 @@ apt install libssl-dev -y
 cd /opt/john/src
 bash /opt/john/src/configure 
 make -s clean && make -sj4
-echo '#!/bin/bash' > /usr/bin/john
-echo '/opt/john/run/john "$@"' >> /usr/bin/john
-chmod +x /usr/bin/john
+echo '#!/bin/bash' > /usr/local/bin/john-the-ripper
+echo '/opt/john/run/john "$@"' >> /usr/local/bin/john-the-ripper
+chmod +x /usr/bin/john-the-ripper
 curl 'https://raw.githubusercontent.com/stricture/hashstack-server-plugin-jtr/master/scrapers/sshng2john.py' > /opt/john/run/sshng2john.py
-
+apt install john -y

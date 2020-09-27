@@ -55,3 +55,7 @@ apt install filezilla -y
 apt install tcpdump -y
 apt install wireshark -y
 apt install cewl -y
+apt install snapd -y
+snap install p3x-onenote
+apt install adapta-gtk-theme -y
+apt install virtualbox -y

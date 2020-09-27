@@ -60,14 +60,17 @@ def get_links(url):
         print(Fore.RED+"    --> "+Fore.GREEN+"An error occurred ! , Please check your url again")
         pass
 def get_page_title(url):
-    '''
-    br = Browser()
-    br.open(url)
     print(Fore.RED+"[+] Page title:")
-    if br.title():
-        print(Fore.RED+"    --> "+Fore.GREEN+br.title())
+    try:
+    	br = Browser()
+    	br.open(url)
+    	if br.title():
+            print(Fore.RED+"    --> "+Fore.GREEN+br.title())
+    except:
+        print(Fore.RED+"    --> "+Fore.GREEN+"An error occurred ! , Please check your url again")
+        pass
+
     '''
-    print(Fore.RED+"[+] Page title:")
     try:
         html = requests.get(url).read().decode('utf8')
         soup = BeautifulSoup(html, 'html.parser')
@@ -79,7 +82,7 @@ def get_page_title(url):
     except:
         print(Fore.RED+"    --> "+Fore.GREEN+"An error occurred ! , Please check your url again")
         pass
-
+    '''
 def get_page_headers(response):
     print(Fore.RED+"[+] Page headers:"+Fore.GREEN)
     try:
@@ -259,7 +262,6 @@ if op.url:
     if op.url.startswith('http://') or op.url.startswith('https://'):
         print(Fore.RED+"[+] Trying to enumerate: "+Fore.GREEN+op.url)
         response = request(op.url)
-        get_ssl(op.url)
         get_page_title(op.url)
         technology(op.url)
         parse_robots(op.url)
@@ -269,6 +271,7 @@ if op.url:
         get_subdomain(response)
         comment(op.url)
         scripts_links(op.url)
+	    #get_ssl(op.url)
     else:
         print(Fore.RED+"[-] Please use a valid URL format !")           
 else:
