@@ -645,7 +645,13 @@ os_list_size = len(os_list)
 
 
 clear()
-ascii_banner = pyfiglet.figlet_format("Shell Simplifier !")
+#ascii_banner = pyfiglet.figlet_format("Shell Simplifier !")
+ascii_banner = """        _____                      ___________ _____________               
+___________(_)_______ ___ ________ ___  /___(_)___  __/___(_)_____ ________
+__  ___/__  / __  __ `__ \___  __ \__  / __  / __  /_  __  / _  _ \__  ___/
+_(__  ) _  /  _  / / / / /__  /_/ /_  /  _  /  _  __/  _  /  /  __/_  /    
+/____/  /_/   /_/ /_/ /_/ _  .___/ /_/   /_/   /_/     /_/   \___/ /_/     
+                          /_/ """
 print(Fore.RED+ascii_banner)
 print("\n\t\t\t\t\t\t\tby YaSsInE\n")
 print("\t"+Fore.GREEN+60*"=")
@@ -653,7 +659,6 @@ print(Fore.GREEN+"\t="+Fore.BLUE+"  Website    : https://0xyassine.github.io"+Fo
 print(Fore.GREEN+"\t="+Fore.BLUE+"  HackTheBox : https://www.hackthebox.eu/profile/143843"+Fore.GREEN+"   =")
 print(Fore.GREEN+"\t="+Fore.RED+"\t\t\t\t\t\t    v1.3"+Fore.GREEN+"   =")
 print("\t"+Fore.GREEN+60*"="+"\n")
-
 
 signal.signal(signal.SIGINT, signal_handler)
 os_item = select_item(os_list, os_list_size)
@@ -852,7 +857,7 @@ elif os_item == "install scripts":
         print(Fore.GREEN+'\nThank you for using my tool !! See you soon ...')            
 elif os_item == "install third-party apps":
     items = []
-    questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['chrome','sublime-text','virtualbox','xdm','mega-sync','teamviewer','vscode'],)]
+    questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['discord','chrome','sublime-text','virtualbox','xdm','mega-sync','teamviewer','vscode'],)]
     try:
         answers = inquirer.prompt(questions)
         if len(answers['scripts']) == 0:
