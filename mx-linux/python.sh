@@ -36,3 +36,11 @@ pip install gevent==1.2.0
 pip install cme
 pip3 install cme
 apt install python3-gmpy2 -y
+pip install ropper
+pip3 install ropper
+pip install keystone-engine
+pip3 install keystone-engine
+pip install unicorn
+pip3 install unicorn
+pip install pwn
+pip3 install pwn

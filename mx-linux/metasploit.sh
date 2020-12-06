@@ -18,3 +18,4 @@ curl 'https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/
 chmod +x /tmp/msfinstall
 bash /tmp/msfinstall
 rm /tmp/msfinstall
+git clone https://github.com/rapid7/metasploit-framework.git /opt/metasploit

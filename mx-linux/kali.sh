@@ -68,3 +68,12 @@ curl -sSL https://get.rvm.io | bash
 usermod -a -G rvm `whoami`
 source /etc/profile.d/rvm.sh
 rvm requirements
+apt install -y hashid
+apt install wine -y
+apt install wine32 -y
+apt install calibre -y
+apt install awscli -y
+sh -c "$(curl -fsSL http://gef.blah.cat/sh)"
+apt install gdb -y
+apt-get install gcc-multilib -y
+apt install pdfgrep -y

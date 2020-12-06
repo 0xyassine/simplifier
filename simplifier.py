@@ -901,7 +901,7 @@ elif os_item == "install Top tools":
             os.system(tool)
         elif "Other Tools":
             items = []
-            questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['autorecon','bloodhound','burpsuite','crackmapexec','curl-http3','dotdotpwn','gitdumper','gobuster','impacket','jd-gui','john','maltego','metasploit','mysql','nvidia','padbuster','powershell','ridenum','rsacrack','searchsploit','seclist','setoolkit','shodan','winpayloads','ysoserial','xsstrike','microsoft-team'],)]
+            questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['pattern-generator','autorecon','bloodhound','burpsuite','crackmapexec','curl-http3','dotdotpwn','gitdumper','gobuster','impacket','jd-gui','john','maltego','metasploit','mysql','nvidia','padbuster','powershell','ridenum','rsacrack','searchsploit','seclist','setoolkit','shodan','winpayloads','ysoserial','xsstrike','microsoft-team'],)]
             try:
                 answers = inquirer.prompt(questions)
                 if len(answers['scripts']) == 0:
