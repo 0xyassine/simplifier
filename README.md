@@ -28,4 +28,4 @@ More scripts will be added soon <br/><br/>
 
 > Note: to run it from any location: ln -s $(pwd)/simplifier.py /usr/local/bin/
 
-![info](https://github.com/0xyassine/simplifier/blob/master/img/info.png)
+![info](https://github.com/0xyassine/simplifier/blob/master/img/info.jpg)
