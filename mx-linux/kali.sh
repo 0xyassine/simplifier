@@ -77,3 +77,4 @@ sh -c "$(curl -fsSL http://gef.blah.cat/sh)"
 apt install gdb -y
 apt-get install gcc-multilib -y
 apt install pdfgrep -y
+apt install cmake -y
