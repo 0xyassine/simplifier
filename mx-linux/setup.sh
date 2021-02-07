@@ -25,3 +25,5 @@ apt install ruby -y
 apt install g++ -y
 apt install ruby-dev -y
 apt install golang-go -y
+apt install curl -y
+apt install python -y

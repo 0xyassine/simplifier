@@ -58,7 +58,7 @@ apt install cewl -y
 apt install snapd -y
 snap install p3x-onenote
 apt install adapta-gtk-theme -y
-apt install youtube-dl-gui -y
+#apt install youtube-dl-gui -y
 apt install crunch -y
 apt install dos2unix -y
 apt install axel -y
@@ -73,8 +73,11 @@ apt install wine -y
 apt install wine32 -y
 apt install calibre -y
 apt install awscli -y
-sh -c "$(curl -fsSL http://gef.blah.cat/sh)"
+wget -O ~/.gdbinit-gef.py -q http://gef.blah.cat/py
+echo source ~/.gdbinit-gef.py >> ~/.gdbinit
 apt install gdb -y
 apt-get install gcc-multilib -y
 apt install pdfgrep -y
 apt install cmake -y
+apt install torbrowser-launcher -y
+apt install mlocate -y

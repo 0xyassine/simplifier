@@ -30,7 +30,7 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 def options():
-	parser.add_option('-u', '--url',dest="url",help="file to be analyzed")
+	parser.add_option('-u', '--url',dest="url",help="url to be analyzed")
 	option, args = parser.parse_args()
 	if not option.url:
 		print("[-] Please use -h for help")

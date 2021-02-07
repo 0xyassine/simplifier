@@ -13,9 +13,9 @@ function ctrl_c() {
 }
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-printf "${RED}[+] Installing wafw00f , please wait ... \n${GREEN}"
-git clone https://github.com/EnableSecurity/wafw00f.git /opt/waf
-cd /opt/waf
-apt-get install python3-setuptools -y
-apt-get install python-setuptools -y
-python setup.py install
+printf "${RED}[+] Installing tor , please wait ... \n${GREEN}"
+apt update
+adduser tor
+apt-get install torbrowser-launcher
+xhost SI:localuser:tor
+#sudo -u tor -H torbrowser-launcher

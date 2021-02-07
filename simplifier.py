@@ -575,6 +575,8 @@ def os_name():
         return "kali"
     elif "debian" in res and "10" in res and "buster" in res:
         return "Debian 10 buster"
+    elif "Ubuntu" in res:
+        return "ubuntu"
     else:
 	    print(Fore.RED+"[-] OS NOT SUPPORTED !")        
 	    exit()
@@ -614,7 +616,7 @@ def check_apt():
 script_pt = script_path()
 current_path = get_path()
 
-os_list = ["Windows","Linux","magic bytes reverse shell for linux","AV Bypass","AES 256 mode_cbc base64 decoder","AMSI powershell bypass","Bruteforce template","install scripts","install third-party apps","install Top tools"]
+os_list = ["Windows","Linux","magic bytes reverse shell for linux","AV Bypass","AES 256 mode_cbc base64 decoder","AMSI powershell bypass","Bruteforce template","install yassine scripts","install third-party apps","install Top tools"]
 main_list_windows = ["generate shell","enum tools","exe windows tools","ps1 windows tools"]
 main_list_linux = ["generate shell","tools and enumeration scripts"]
 windows_shells = ["nishang shell","FUD reverse shell","windows/exec","windows/x64/exec","windows/meterpreter/reverse_tcp","windows/x64/meterpreter/reverse_tcp","php cmd web shell","aspx cmd web shell"]
@@ -840,7 +842,7 @@ elif os_item == "AV Bypass":
             ip = get_ip()
             port = get_port()            
             tvasion(ip,port,"msf",msf_item)
-elif os_item == "install scripts":
+elif os_item == "install yassine scripts":
     items = []
     questions = [inquirer.Checkbox('scripts',message="use space to select tool(s) and press enter for install ",choices=['smb-login-brute.sh','oneliner.py','basic-web-enum.py'],)]
     try:
@@ -881,7 +883,7 @@ elif os_item == "install Top tools":
         tool = str(script_pt)+"/scripts/parrot-setup.sh"
         subprocess.call(["chmod","777",tool])
         os.system(tool)
-    elif str(os_name()) == "Debian 10 buster":
+    elif str(os_name()) == "Debian 10 buster" or str(os_name()) == "ubuntu":
         print(Fore.GREEN+"--> ["+Fore.RED+str(os_name())+Fore.GREEN+"] os detected !")
         print(Fore.GREEN+50*"-")
         print(Fore.RED+"--> IF IT'S THE FIRST TIME , YOU SHOULD RUN BASIC SETUP TO AVOID ERRORS ! <--")
@@ -901,7 +903,7 @@ elif os_item == "install Top tools":
             os.system(tool)
         elif "Other Tools":
             items = []
-            questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['pattern-generator','autorecon','bloodhound','burpsuite','crackmapexec','curl-http3','dotdotpwn','gitdumper','gobuster','impacket','jd-gui','john','maltego','metasploit','mysql','nvidia','padbuster','powershell','ridenum','rsacrack','searchsploit','seclist','setoolkit','shodan','winpayloads','ysoserial','xsstrike','microsoft-team'],)]
+            questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['pattern-generator','autorecon','bloodhound','burpsuite','crackmapexec','curl-http3','dotdotpwn','gitdumper','gobuster','impacket','jd-gui','john','maltego','metasploit','mysql','nvidia','padbuster','powershell','ridenum','rsacrack','searchsploit','seclist','setoolkit','shodan','winpayloads','ysoserial','xsstrike','microsoft-team','tor','brave'],)]
             try:
                 answers = inquirer.prompt(questions)
                 if len(answers['scripts']) == 0:
