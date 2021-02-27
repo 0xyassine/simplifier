@@ -14,7 +14,7 @@ function ctrl_c() {
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 printf "${RED}[+] Installing alfa driver , please wait ... \n${GREEN}"
-apt install git build-essential libelf-dev linux-headers-`uname -r` debhelper dpkg-dev dkms bc
+apt install git build-essential libelf-dev linux-headers-`uname -r` debhelper dpkg-dev dkms bc -y
 git clone https://github.com/aircrack-ng/rtl8812au /opt/rtl8812au
 cd /opt/rtl8812au/
 make dkms_install

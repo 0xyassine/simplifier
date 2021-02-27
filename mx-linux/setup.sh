@@ -29,6 +29,6 @@ apt install curl -y
 apt install python -y
 apt install python3-pip -y
 apt install python3 -y
-curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
-python3 get-pip.py
+curl https://bootstrap.pypa.io/2.7/get-pip.py --output get-pip.py
+python get-pip.py
 rm get-pip.py
