@@ -22,6 +22,6 @@ bash /opt/john/src/configure
 make -s clean && make -sj4
 echo '#!/bin/bash' > /usr/local/bin/john-the-ripper
 echo '/opt/john/run/john "$@"' >> /usr/local/bin/john-the-ripper
-chmod +x /usr/bin/john-the-ripper
+chmod +x /usr/local/bin/john-the-ripper
 curl 'https://raw.githubusercontent.com/stricture/hashstack-server-plugin-jtr/master/scrapers/sshng2john.py' > /opt/john/run/sshng2john.py
 apt install john -y

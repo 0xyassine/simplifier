@@ -81,3 +81,8 @@ apt install pdfgrep -y
 apt install cmake -y
 apt install torbrowser-launcher -y
 apt install mlocate -y
+apt install p7zip-full -y
+apt install default-jdk -y
+apt install ssh -y
+apt install aircrack-ng -y
+apt install mitmproxy -y

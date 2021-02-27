@@ -564,7 +564,7 @@ def sources(name):
 	if name == "parrot":
 		return "deb http://deb.debian.org/debian/ jessie main contrib non-free","deb https://http.kali.org/kali kali-rolling main non-free contrib"
 	elif name == "kali":
-		return "deb-src http://http.kali.org/kali kali-rolling main non-free contrib","deb http://http.kali.org/kali kali-rolling main non-free contrib"
+		return "deb-src http://http.kali.org/kali kali-rolling main contrib non-free","deb http://http.kali.org/kali kali-rolling main contrib non-free"
 
 def os_name():
     res = subprocess.check_output(["cat","/etc/os-release"])
@@ -903,7 +903,7 @@ elif os_item == "install Top tools":
             os.system(tool)
         elif "Other Tools":
             items = []
-            questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['pattern-generator','autorecon','bloodhound','burpsuite','crackmapexec','curl-http3','dotdotpwn','gitdumper','gobuster','impacket','jd-gui','john','maltego','metasploit','mysql','nvidia','padbuster','powershell','ridenum','rsacrack','searchsploit','seclist','setoolkit','shodan','winpayloads','ysoserial','xsstrike','microsoft-team','tor','brave'],)]
+            questions = [inquirer.Checkbox('scripts',message="use space to select app(s) and press enter for install ",choices=['alfa-driver','pattern-generator','autorecon','bloodhound','burpsuite','crackmapexec','curl-http3','dotdotpwn','gitdumper','gobuster','impacket','jd-gui','john','maltego','metasploit','mysql','nvidia','padbuster','powershell','ridenum','rsacrack','searchsploit','seclist','setoolkit','shodan','winpayloads','ysoserial','xsstrike','microsoft-team','tor','brave'],)]
             try:
                 answers = inquirer.prompt(questions)
                 if len(answers['scripts']) == 0:
