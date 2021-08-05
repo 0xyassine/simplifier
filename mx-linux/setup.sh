@@ -32,3 +32,4 @@ apt install python3 -y
 curl https://bootstrap.pypa.io/2.7/get-pip.py --output get-pip.py
 python get-pip.py
 rm get-pip.py
+apt install rails -y
