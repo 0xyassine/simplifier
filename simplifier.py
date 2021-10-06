@@ -564,7 +564,7 @@ def sources(name):
 	if name == "parrot":
 		return "deb http://deb.debian.org/debian/ jessie main contrib non-free","deb https://http.kali.org/kali kali-rolling main non-free contrib"
 	elif name == "kali":
-		return "deb-src http://http.kali.org/kali kali-rolling main contrib non-free","deb http://http.kali.org/kali kali-rolling main contrib non-free"
+		return "deb http://http.kali.org/kali kali-rolling main contrib non-free"
 
 def os_name():
     res = subprocess.check_output(["cat","/etc/os-release"])
